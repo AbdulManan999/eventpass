@@ -72,6 +72,7 @@ npm install
 cp .env.example .env      # then set your Postgres password and generate the two secrets
 npm run db:setup          # creates the eventpass and eventpass_test databases
 npm run migrate
+npm run seed              # demo events + attendee@eventpass.dev / eventpass-demo
 npm run dev               # http://localhost:3000/health
 npm test                  # unit tests + end-to-end API tests against eventpass_test
 ```
