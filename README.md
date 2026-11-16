@@ -4,7 +4,7 @@ Event ticketing and check-in that keeps working when the venue Wi-Fi doesn't.
 
 Attendees get a QR ticket signed with the event's private key. Gate staff scan it on a phone that has only the event's **public key**, so tickets are verified **offline** in milliseconds. Scans are queued on the device and synced when it reconnects; the server settles conflicts, such as the same ticket scanned at two gates, deterministically.
 
-> **Status:** work in progress. The backend API is done and tested. The Flutter app and the React admin dashboard are next. See the [roadmap](#roadmap).
+> **Status:** work in progress. The backend API and the attendee side of the Flutter app are done and tested; gate-staff scanning is next. See the [roadmap](#roadmap).
 
 ## Architecture
 
@@ -64,7 +64,7 @@ Design choices:
 
 ## Run it locally
 
-Requirements: Node.js 22+ and PostgreSQL 15+.
+Requirements: Node.js 22+, PostgreSQL 15+ and Flutter 3.47+.
 
 ```bash
 cd backend
@@ -76,12 +76,20 @@ npm run dev               # http://localhost:3000/health
 npm test                  # unit tests + end-to-end API tests against eventpass_test
 ```
 
+Then the app (Flutter 3.47+), with the backend running:
+
+```bash
+cd mobile
+flutter pub get
+flutter run               # Android emulator; see mobile/README.md for a physical phone
+```
+
 ## Roadmap
 
 - [x] Backend: auth, events, signed tickets, offline-scan sync, revocation, stats
 - [x] Tests: token crypto, full ticket-to-check-in flow, concurrency, auth and validation
-- [x] CI: type check and tests against PostgreSQL 17 on every push
-- [ ] Flutter app: attendee mode (tickets, QR, offline cache)
+- [x] CI: backend type check + tests against PostgreSQL 17; Flutter analyze + tests
+- [x] Flutter app: attendee mode — sign in, events, claim ticket, QR, offline ticket cache, English/Urdu ([details](mobile/README.md))
 - [ ] Flutter app: staff mode (camera scanner, offline verification, sync queue)
 - [ ] Geofenced self check-in
 - [ ] React + TypeScript admin dashboard with live check-in chart
@@ -89,4 +97,4 @@ npm test                  # unit tests + end-to-end API tests against eventpass_
 
 ## Tech
 
-Node.js 24 · TypeScript · Fastify 5 · PostgreSQL 17 · Zod · Vitest · GitHub Actions · Flutter (coming)
+Node.js 24 · TypeScript · Fastify 5 · PostgreSQL 17 · Zod · Vitest · Flutter 3.47 · Riverpod · Dio · Drift · GitHub Actions

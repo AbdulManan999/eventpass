@@ -1,0 +1,7 @@
+# flutter gen-l10n config — generates lib/l10n/app_localizations*.dart from the .arb files.
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+output-dir: lib/l10n
+nullable-getter: true
