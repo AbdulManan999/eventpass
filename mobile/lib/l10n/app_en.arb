@@ -31,7 +31,11 @@
   "text_view_ticket": "View my ticket",
   "text_capacity": "{count} seats",
   "@text_capacity": {
-    "placeholders": { "count": { "type": "int" } }
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   },
   "text_offline_tickets": "You're offline. Showing saved tickets; they still scan at the gate.",
   "text_show_at_gate": "Show this code at the entrance",
@@ -45,6 +49,150 @@
   "text_language": "Language",
   "text_hello_user": "Hello, {name}",
   "@text_hello_user": {
-    "placeholders": { "name": { "type": "String" } }
-  }
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "category_all": "All",
+  "category_tech": "Tech",
+  "category_music": "Music",
+  "category_sports": "Sports",
+  "category_business": "Business",
+  "category_community": "Community",
+  "text_discover": "Find your next event",
+  "text_search_events": "Search events or venues",
+  "text_happening_now": "Happening now",
+  "text_upcoming": "Upcoming",
+  "text_past": "Past",
+  "text_live_now": "Live now",
+  "text_spots_left": "{count} spots left",
+  "@text_spots_left": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "text_sold_out": "Sold out",
+  "text_no_matching_events": "No events match your search",
+  "text_about_event": "About this event",
+  "text_date_time": "Date and time",
+  "text_venue": "Venue",
+  "text_tickets_claimed": "{issued} of {capacity} tickets claimed",
+  "@text_tickets_claimed": {
+    "placeholders": {
+      "issued": {
+        "type": "int"
+      },
+      "capacity": {
+        "type": "int"
+      }
+    }
+  },
+  "text_self_checkin_zone": "Self check-in works within {distance} of the venue",
+  "@text_self_checkin_zone": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "text_checked_in": "Checked in",
+  "text_checked_in_at": "Checked in at {time}",
+  "@text_checked_in_at": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "text_checked_in_via_qr": "Scanned at the gate",
+  "text_checked_in_via_geofence": "Self check-in with location",
+  "text_starts_in": "Starts in {time}",
+  "@text_starts_in": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "text_ended": "Ended",
+  "text_revoked": "Revoked",
+  "text_check_in_with_location": "Check in with my location",
+  "text_self_checkin_hint": "At the venue? Check in from your phone and skip the queue.",
+  "text_self_checkin_opens": "Self check-in opens 2 hours before the start",
+  "text_welcome_in": "You're in! Enjoy the event",
+  "text_already_checked_in": "This ticket was already checked in",
+  "text_location_disabled": "Turn on location services to check in",
+  "text_location_denied": "Location permission is needed to check in",
+  "text_location_denied_forever": "Location permission is blocked. Enable it in Settings.",
+  "text_open_settings": "Open settings",
+  "text_scan": "Scan",
+  "text_gate_scanner": "Gate scanner",
+  "text_staff_events_hint": "Events you can scan tickets for",
+  "text_no_staff_events": "You're not gate staff for any event yet. Ask the organizer to add your email.",
+  "text_role_organizer": "Organizer",
+  "text_role_staff": "Staff",
+  "text_gate_name": "Gate name",
+  "text_gate_name_hint": "e.g. North gate",
+  "text_gate_name_help": "Shown on the organizer's dashboard for scans from this phone.",
+  "text_save": "Save",
+  "text_admitted": "Admitted",
+  "text_already_used": "Already used",
+  "text_invalid_ticket": "Invalid ticket",
+  "text_wrong_event": "Ticket for another event",
+  "text_point_camera": "Point the camera at a ticket QR code",
+  "text_rejected": "Rejected",
+  "text_pending_sync": "To sync",
+  "text_synced": "Synced {time}",
+  "@text_synced": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "text_syncing": "Syncing…",
+  "text_offline_mode": "Offline: scans are saved on this phone",
+  "text_sync_failed": "Sync failed. Will retry.",
+  "text_verified_offline": "Verified on this phone with the event's key · {count} revoked",
+  "@text_verified_offline": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "text_overruled": "{count} admitted here had already been used at another gate",
+  "@text_overruled": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "text_scan_history": "Scan history",
+  "text_no_scans": "No scans yet",
+  "text_camera_error": "Camera unavailable. Allow camera access in Settings.",
+  "text_sync_now": "Sync now",
+  "text_pending": "Pending",
+  "text_logout_pending": "{count} scans haven't synced yet and will be lost. Log out anyway?",
+  "@text_logout_pending": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "text_scanned_by_server": "Server: {result}",
+  "@text_scanned_by_server": {
+    "placeholders": {
+      "result": {
+        "type": "String"
+      }
+    }
+  },
+  "text_ready_to_scan": "Ready to scan"
 }

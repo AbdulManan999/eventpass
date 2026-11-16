@@ -2,10 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eventpass/database/my_database.dart';
 import 'package:eventpass/models/Ticket.dart';
+import 'package:eventpass/models/response/tickets/CheckInResponse.dart';
 import 'package:eventpass/models/response/tickets/MyTicketsResponse.dart';
 import 'package:eventpass/network/environment_config.dart';
 import 'package:eventpass/repository/network_repository.dart';
 import 'package:eventpass/utils/exceptions.dart';
+import 'package:eventpass/utils/location_service.dart';
 
 final ticketsRepository = Provider((ref) => _TicketsRepository(ref));
 
@@ -52,6 +54,36 @@ class _TicketsRepository {
       final ticket = Ticket.fromJson(response.data);
       await ref.read(databaseProvider).ticketsDao.upsert(ticket);
       return ticket;
+    } on DataException {
+      rethrow;
+    } catch (error) {
+      throw DataException(message: error.toString(), statusCode: 0);
+    }
+  }
+
+  /// Geofenced self check-in: takes one GPS fix and lets the server decide
+  /// whether the phone is inside the venue's radius. On success the cached
+  /// ticket is marked as checked in.
+  Future<CheckInResponse> apiSelfCheckIn(Ticket ticket) async {
+    try {
+      final fix = await ref.read(locationServiceProvider).currentFix();
+      final Response response = await ref.read(networkRepositoryProvider).getRequest(
+            EnvironmentConfig.SELF_CHECK_IN(ticket.event!.id!),
+            UrlSuffix.POST,
+            true,
+            data: {
+              'latitude': fix.latitude,
+              'longitude': fix.longitude,
+              'accuracyM': fix.accuracyM,
+              'isMocked': fix.isMocked,
+            },
+          );
+      final result = CheckInResponse.fromJson(response.data);
+      await ref.read(databaseProvider).ticketsDao.upsert(ticket.checkedIn(result.checkedInAt!, result.method ?? 'geofence'));
+      return result;
+    } on LocationException catch (e) {
+      // statusCode -1: not an HTTP error; the message is a code the screen translates.
+      throw DataException(message: e.code, statusCode: -1);
     } on DataException {
       rethrow;
     } catch (error) {

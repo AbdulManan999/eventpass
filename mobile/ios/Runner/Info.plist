@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Gate staff use the camera to scan ticket QR codes.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is checked once to confirm you are at the venue for self check-in.</string>
 </dict>
 </plist>

@@ -32,6 +32,8 @@ class TicketsDao extends DatabaseAccessor<MyDatabase> with _$TicketsDaoMixin imp
         issuedAt: t.issuedAt ?? '',
         token: t.token ?? '',
         eventJson: jsonEncode(t.event?.toJson() ?? {}),
+        checkedInAt: Value(t.checkedInAt),
+        checkInMethod: Value(t.checkInMethod),
       );
 }
 

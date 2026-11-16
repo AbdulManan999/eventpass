@@ -4,9 +4,11 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:drift/native.dart';
 import 'package:eventpass/database/my_database.dart';
+import 'package:eventpass/models/Ticket.dart';
 import 'package:eventpass/repository/network_repository.dart';
 import 'package:eventpass/repository/tickets_repository.dart';
 import 'package:eventpass/utils/exceptions.dart';
+import 'package:eventpass/utils/location_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,19 +55,34 @@ Map<String, dynamic> ticketJson(String id, {String status = 'valid'}) => {
       },
     };
 
+/// Returns a fixed position, or throws [error].
+class FakeLocation extends LocationService {
+  LocationFix fix = LocationFix(latitude: 31.4766, longitude: 74.3424, accuracyM: 12, isMocked: false);
+  LocationException? error;
+
+  @override
+  Future<LocationFix> currentFix() async {
+    if (error != null) throw error!;
+    return fix;
+  }
+}
+
 void main() {
   late FakeAdapter adapter;
+  late FakeLocation location;
   late MyDatabase db;
   late ProviderContainer container;
 
   setUp(() {
     SharedPreferences.setMockInitialValues({'token': 'test-token'});
     adapter = FakeAdapter();
+    location = FakeLocation();
     db = MyDatabase.forTesting(NativeDatabase.memory());
     container = ProviderContainer(
       overrides: [
         clientProvider.overrideWithValue(Dio(BaseOptions(baseUrl: 'http://api.test/'))..httpClientAdapter = adapter),
         databaseProvider.overrideWithValue(db),
+        locationServiceProvider.overrideWithValue(location),
       ],
     );
   });
@@ -148,5 +165,44 @@ void main() {
       container.read(ticketsRepository).apiClaimTicket('event-1'),
       throwsA(isA<DataException>().having((e) => e.toString(), 'message', 'This event is at full capacity')),
     );
+  });
+
+  test('self check-in sends the GPS fix and marks the cached ticket as checked in', () async {
+    adapter.respond = (_) => json([ticketJson('t1')]);
+    final ticket = (await container.read(ticketsRepository).apiGetMyTickets()).tickets.single;
+
+    adapter.respond = (_) => json(
+          {'status': 'checked_in', 'checkedInAt': '2026-12-01T12:10:00.000Z', 'method': 'geofence', 'distanceM': 98},
+          status: 201,
+        );
+    final result = await container.read(ticketsRepository).apiSelfCheckIn(ticket);
+
+    expect(result.distanceM, 98);
+    final request = adapter.requests.last;
+    expect(request.path, 'events/event-1/check-in');
+    expect(request.data, {'latitude': 31.4766, 'longitude': 74.3424, 'accuracyM': 12, 'isMocked': false});
+    final cached = (await db.ticketsDao.getAllData()).single;
+    expect(cached.isCheckedIn, isTrue);
+    expect(cached.checkInMethod, 'geofence');
+  });
+
+  test('self check-in outside the geofence surfaces the server explanation', () async {
+    adapter.respond = (_) => json(
+          {'error': 'outside_geofence', 'message': "You're 4.9 km from the venue", 'distanceM': 4900, 'radiusM': 200},
+          status: 422,
+        );
+    expect(
+      container.read(ticketsRepository).apiSelfCheckIn(Ticket.fromJson(ticketJson('t1'))),
+      throwsA(isA<DataException>().having((e) => e.toString(), 'message', "You're 4.9 km from the venue")),
+    );
+  });
+
+  test('a denied location permission never reaches the server', () async {
+    location.error = LocationException('location_denied');
+    await expectLater(
+      container.read(ticketsRepository).apiSelfCheckIn(Ticket.fromJson(ticketJson('t1'))),
+      throwsA(isA<DataException>().having((e) => e.statusCode, 'statusCode', -1).having((e) => e.message, 'code', 'location_denied')),
+    );
+    expect(adapter.requests, isEmpty);
   });
 }

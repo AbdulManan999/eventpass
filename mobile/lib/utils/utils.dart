@@ -27,6 +27,18 @@ class Utils {
     await prefs.remove(Constants.prefToken);
   }
 
+  // ── Gate name (scanner device id) ──────────────────────────────────────
+  static Future<void> setGateName(String name) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(Constants.prefGateName, name);
+  }
+
+  static Future<String> getGateName() async {
+    final prefs = await SharedPreferences.getInstance();
+    final name = prefs.getString(Constants.prefGateName)?.trim();
+    return (name == null || name.isEmpty) ? Constants.defaultGateName : name;
+  }
+
   // ── Logged-in flag ──────────────────────────────────────────────────────
   static Future<void> setIsLoggedIn(bool value) async {
     final prefs = await SharedPreferences.getInstance();
@@ -87,5 +99,13 @@ class Utils {
     if (isoDate == null || isoDate.isEmpty) return '';
     final parsed = DateTime.tryParse(isoDate);
     return parsed == null ? isoDate : DateFormat(pattern).format(parsed.toLocal());
+  }
+
+  /// Compact countdown: "2d 4h", "3h 20m" or "12m".
+  static String formatCountdown(Duration d) {
+    if (d.isNegative) return '0m';
+    if (d.inDays > 0) return '${d.inDays}d ${d.inHours % 24}h';
+    if (d.inHours > 0) return '${d.inHours}h ${d.inMinutes % 60}m';
+    return '${d.inMinutes.clamp(1, 59)}m';
   }
 }

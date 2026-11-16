@@ -51,6 +51,7 @@ ThemeData _buildLightTheme() {
     colorScheme: colorScheme,
     primaryColor: primaryColor,
     scaffoldBackgroundColor: backgroundColor,
+    navigationBarTheme: const NavigationBarThemeData(backgroundColor: whiteColor, indicatorColor: primaryLightColor),
     snackBarTheme: const SnackBarThemeData(backgroundColor: primaryColor),
     appBarTheme: const AppBarTheme(
       backgroundColor: primaryColor,

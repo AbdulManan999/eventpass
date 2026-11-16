@@ -139,4 +139,232 @@ class AppLocalizationsEn extends AppLocalizations {
   String text_hello_user(String name) {
     return 'Hello, $name';
   }
+
+  @override
+  String get category_all => 'All';
+
+  @override
+  String get category_tech => 'Tech';
+
+  @override
+  String get category_music => 'Music';
+
+  @override
+  String get category_sports => 'Sports';
+
+  @override
+  String get category_business => 'Business';
+
+  @override
+  String get category_community => 'Community';
+
+  @override
+  String get text_discover => 'Find your next event';
+
+  @override
+  String get text_search_events => 'Search events or venues';
+
+  @override
+  String get text_happening_now => 'Happening now';
+
+  @override
+  String get text_upcoming => 'Upcoming';
+
+  @override
+  String get text_past => 'Past';
+
+  @override
+  String get text_live_now => 'Live now';
+
+  @override
+  String text_spots_left(int count) {
+    return '$count spots left';
+  }
+
+  @override
+  String get text_sold_out => 'Sold out';
+
+  @override
+  String get text_no_matching_events => 'No events match your search';
+
+  @override
+  String get text_about_event => 'About this event';
+
+  @override
+  String get text_date_time => 'Date and time';
+
+  @override
+  String get text_venue => 'Venue';
+
+  @override
+  String text_tickets_claimed(int issued, int capacity) {
+    return '$issued of $capacity tickets claimed';
+  }
+
+  @override
+  String text_self_checkin_zone(String distance) {
+    return 'Self check-in works within $distance of the venue';
+  }
+
+  @override
+  String get text_checked_in => 'Checked in';
+
+  @override
+  String text_checked_in_at(String time) {
+    return 'Checked in at $time';
+  }
+
+  @override
+  String get text_checked_in_via_qr => 'Scanned at the gate';
+
+  @override
+  String get text_checked_in_via_geofence => 'Self check-in with location';
+
+  @override
+  String text_starts_in(String time) {
+    return 'Starts in $time';
+  }
+
+  @override
+  String get text_ended => 'Ended';
+
+  @override
+  String get text_revoked => 'Revoked';
+
+  @override
+  String get text_check_in_with_location => 'Check in with my location';
+
+  @override
+  String get text_self_checkin_hint =>
+      'At the venue? Check in from your phone and skip the queue.';
+
+  @override
+  String get text_self_checkin_opens =>
+      'Self check-in opens 2 hours before the start';
+
+  @override
+  String get text_welcome_in => 'You\'re in! Enjoy the event';
+
+  @override
+  String get text_already_checked_in => 'This ticket was already checked in';
+
+  @override
+  String get text_location_disabled => 'Turn on location services to check in';
+
+  @override
+  String get text_location_denied =>
+      'Location permission is needed to check in';
+
+  @override
+  String get text_location_denied_forever =>
+      'Location permission is blocked. Enable it in Settings.';
+
+  @override
+  String get text_open_settings => 'Open settings';
+
+  @override
+  String get text_scan => 'Scan';
+
+  @override
+  String get text_gate_scanner => 'Gate scanner';
+
+  @override
+  String get text_staff_events_hint => 'Events you can scan tickets for';
+
+  @override
+  String get text_no_staff_events =>
+      'You\'re not gate staff for any event yet. Ask the organizer to add your email.';
+
+  @override
+  String get text_role_organizer => 'Organizer';
+
+  @override
+  String get text_role_staff => 'Staff';
+
+  @override
+  String get text_gate_name => 'Gate name';
+
+  @override
+  String get text_gate_name_hint => 'e.g. North gate';
+
+  @override
+  String get text_gate_name_help =>
+      'Shown on the organizer\'s dashboard for scans from this phone.';
+
+  @override
+  String get text_save => 'Save';
+
+  @override
+  String get text_admitted => 'Admitted';
+
+  @override
+  String get text_already_used => 'Already used';
+
+  @override
+  String get text_invalid_ticket => 'Invalid ticket';
+
+  @override
+  String get text_wrong_event => 'Ticket for another event';
+
+  @override
+  String get text_point_camera => 'Point the camera at a ticket QR code';
+
+  @override
+  String get text_rejected => 'Rejected';
+
+  @override
+  String get text_pending_sync => 'To sync';
+
+  @override
+  String text_synced(String time) {
+    return 'Synced $time';
+  }
+
+  @override
+  String get text_syncing => 'Syncing…';
+
+  @override
+  String get text_offline_mode => 'Offline: scans are saved on this phone';
+
+  @override
+  String get text_sync_failed => 'Sync failed. Will retry.';
+
+  @override
+  String text_verified_offline(int count) {
+    return 'Verified on this phone with the event\'s key · $count revoked';
+  }
+
+  @override
+  String text_overruled(int count) {
+    return '$count admitted here had already been used at another gate';
+  }
+
+  @override
+  String get text_scan_history => 'Scan history';
+
+  @override
+  String get text_no_scans => 'No scans yet';
+
+  @override
+  String get text_camera_error =>
+      'Camera unavailable. Allow camera access in Settings.';
+
+  @override
+  String get text_sync_now => 'Sync now';
+
+  @override
+  String get text_pending => 'Pending';
+
+  @override
+  String text_logout_pending(int count) {
+    return '$count scans haven\'t synced yet and will be lost. Log out anyway?';
+  }
+
+  @override
+  String text_scanned_by_server(String result) {
+    return 'Server: $result';
+  }
+
+  @override
+  String get text_ready_to_scan => 'Ready to scan';
 }

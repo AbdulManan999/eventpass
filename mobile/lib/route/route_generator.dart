@@ -6,6 +6,7 @@ import 'package:eventpass/views/event_detail/event_detail_screen.dart';
 import 'package:eventpass/views/home_screen/home_screen.dart';
 import 'package:eventpass/views/login/login_screen.dart';
 import 'package:eventpass/views/register/register_screen.dart';
+import 'package:eventpass/views/scanner/scanner_screen.dart';
 import 'package:eventpass/views/splash/splash_screen.dart';
 import 'package:eventpass/views/ticket_detail/ticket_detail_screen.dart';
 // [MODULE_ROUTE_IMPORTS]
@@ -36,6 +37,10 @@ class RouteGenerator {
       case Routes.TICKET_DETAIL:
         if (args is! Ticket) return _errorRoute(settings.name, args);
         return MaterialPageRoute<dynamic>(builder: (_) => TicketDetailScreen(ticket: args));
+
+      case Routes.SCANNER:
+        if (args is! Event) return _errorRoute(settings.name, args);
+        return MaterialPageRoute<dynamic>(builder: (_) => ScannerScreen(event: args));
 
       // [MODULE_ROUTE_CASES]
 

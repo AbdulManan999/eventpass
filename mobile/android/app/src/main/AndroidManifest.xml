@@ -1,5 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Gate staff scan ticket QR codes with the camera. -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <!-- Geofenced self check-in reads one location fix on demand. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <application
         android:label="EventPass"
         android:name="${applicationName}"

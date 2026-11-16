@@ -14,6 +14,10 @@ class TicketsTable extends Table {
   /// The ticket's event, stored as JSON — it is only ever read back whole.
   TextColumn get eventJson => text()();
 
+  /// Added in schema version 2.
+  TextColumn get checkedInAt => text().nullable()();
+  TextColumn get checkInMethod => text().nullable()();
+
   @override
   Set<Column> get primaryKey => {id};
 }

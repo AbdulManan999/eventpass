@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:eventpass/database/my_database.dart';
 import 'package:eventpass/localization/app_localization_context.dart';
 import 'package:eventpass/providers/home_screen_notifier.dart';
 import 'package:eventpass/repository/auth_repository.dart';
@@ -41,6 +42,14 @@ class ProfileTab extends ConsumerWidget {
             ),
             title: Text(user?.name ?? '', style: const TextStyle(fontWeight: FontWeight.w600)),
             subtitle: Text('${loc.text_signed_in_as} ${user?.email ?? ''}'),
+            trailing: user?.role == 'organizer'
+                ? Chip(
+                    label: Text(loc.text_role_organizer),
+                    labelStyle: TextStyle(color: primaryColor, fontSize: 12.sp, fontWeight: FontWeight.w600),
+                    backgroundColor: primaryLightColor,
+                    side: BorderSide.none,
+                  )
+                : null,
           ),
         ),
         SizedBox(height: 16.h),
@@ -59,12 +68,17 @@ class ProfileTab extends ConsumerWidget {
           style: OutlinedButton.styleFrom(foregroundColor: redColor, side: const BorderSide(color: redColor)),
           icon: const Icon(Icons.logout),
           label: Text(loc.text_logout),
-          onPressed: () => DialogBuilder.showLogoutDialog(
-            context: context,
-            title: loc.text_logout,
-            content: loc.text_dialog_logout,
-            callback: logout,
-          ),
+          onPressed: () async {
+            // Logging out deletes this phone's scan queue, so warn about unsynced scans.
+            final pending = await ref.read(databaseProvider).scansDao.pendingCount();
+            if (!context.mounted) return;
+            DialogBuilder.showLogoutDialog(
+              context: context,
+              title: loc.text_logout,
+              content: pending > 0 ? loc.text_logout_pending(pending) : loc.text_dialog_logout,
+              callback: logout,
+            );
+          },
         ),
       ],
     );

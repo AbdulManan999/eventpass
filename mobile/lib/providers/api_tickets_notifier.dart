@@ -51,6 +51,22 @@ class ApiTicketsNotifier extends StateNotifier<ApiStatesModel> {
     }
   }
 
+  Future<void> apiSelfCheckIn(Ticket ticket) async {
+    try {
+      state = ApiStatesModel(States.LOADING, '', null);
+      final result = await _ref.read(ticketsRepository).apiSelfCheckIn(ticket);
+      final updated = ticket.checkedIn(result.checkedInAt!, result.method ?? 'geofence');
+      _ref.read(myTicketsProvider.notifier).update((list) => [
+            for (final t in list ?? const <Ticket>[]) t.id == ticket.id ? updated : t,
+          ]);
+      state = ApiStatesModel(States.DATA, '', result);
+    } on DataException catch (ex) {
+      _setError(ex);
+    } catch (ex) {
+      state = ApiStatesModel(States.ERROR, ex.toString(), null);
+    }
+  }
+
   void _setError(DataException ex) {
     state = ex.statusCode == 401
         ? ApiStatesModel(States.SESSIONEXPIRED, ex.toString(), null)

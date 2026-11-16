@@ -24,4 +24,8 @@ class Constants {
   static const String prefToken = 'token';
   static const String prefIsLoggedIn = 'is_logged_in';
   static const String prefUserData = 'user_data';
+  static const String prefGateName = 'gate_name';
+
+  /// Sent as the scanner's device id; shown per gate on the admin dashboard.
+  static const String defaultGateName = 'Main gate';
 }

@@ -6,12 +6,22 @@ import 'Event.dart';
 /// QR code. Gate scanners verify it offline, so a cached copy works with no
 /// connection.
 class Ticket {
-  Ticket({String? id, String? status, String? issuedAt, String? token, Event? event}) {
+  Ticket({
+    String? id,
+    String? status,
+    String? issuedAt,
+    String? token,
+    Event? event,
+    String? checkedInAt,
+    String? checkInMethod,
+  }) {
     _id = id;
     _status = status;
     _issuedAt = issuedAt;
     _token = token;
     _event = event;
+    _checkedInAt = checkedInAt;
+    _checkInMethod = checkInMethod;
   }
 
   Ticket.fromJson(dynamic json) {
@@ -20,6 +30,8 @@ class Ticket {
     _issuedAt = json['issuedAt'];
     _token = json['token'];
     _event = json['event'] != null ? Event.fromJson(json['event']) : null;
+    _checkedInAt = json['checkedInAt'];
+    _checkInMethod = json['checkInMethod'];
   }
 
   /// Row constructor for Drift (`@UseRowClass`): parameter names match the
@@ -30,12 +42,16 @@ class Ticket {
     required String issuedAt,
     required String token,
     required String eventJson,
+    String? checkedInAt,
+    String? checkInMethod,
   }) {
     _id = id;
     _status = status;
     _issuedAt = issuedAt;
     _token = token;
     _event = Event.fromJson(jsonDecode(eventJson));
+    _checkedInAt = checkedInAt;
+    _checkInMethod = checkInMethod;
   }
 
   String? _id;
@@ -43,6 +59,8 @@ class Ticket {
   String? _issuedAt;
   String? _token;
   Event? _event;
+  String? _checkedInAt;
+  String? _checkInMethod;
 
   String? get id => _id;
 
@@ -52,7 +70,25 @@ class Ticket {
   String? get token => _token;
   Event? get event => _event;
 
+  /// ISO-8601 time of the accepted check-in, or null if not checked in.
+  String? get checkedInAt => _checkedInAt;
+
+  /// `qr` (scanned at a gate) or `geofence` (self check-in).
+  String? get checkInMethod => _checkInMethod;
+
   bool get isRevoked => _status == 'revoked';
+  bool get isCheckedIn => _checkedInAt != null;
+
+  /// A copy marked as checked in, e.g. after a successful self check-in.
+  Ticket checkedIn(String at, String method) => Ticket(
+        id: _id,
+        status: _status,
+        issuedAt: _issuedAt,
+        token: _token,
+        event: _event,
+        checkedInAt: at,
+        checkInMethod: method,
+      );
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -61,6 +97,8 @@ class Ticket {
     map['issuedAt'] = _issuedAt;
     map['token'] = _token;
     if (_event != null) map['event'] = _event?.toJson();
+    map['checkedInAt'] = _checkedInAt;
+    map['checkInMethod'] = _checkInMethod;
     return map;
   }
 }

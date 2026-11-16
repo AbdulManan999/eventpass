@@ -6,6 +6,7 @@ import 'package:eventpass/models/request/auth/RegisterRequest.dart';
 import 'package:eventpass/models/response/auth/AuthResponse.dart';
 import 'package:eventpass/network/environment_config.dart';
 import 'package:eventpass/providers/api_events_notifier.dart';
+import 'package:eventpass/providers/api_scanner_notifier.dart';
 import 'package:eventpass/providers/api_tickets_notifier.dart';
 import 'package:eventpass/providers/home_screen_notifier.dart';
 import 'package:eventpass/repository/network_repository.dart';
@@ -60,8 +61,17 @@ class _AuthRepository {
     ref.invalidate(eventsListProvider);
     ref.invalidate(myTicketsProvider);
     ref.invalidate(ticketsFromCacheProvider);
-    // Cached tickets carry the previous user's QR codes.
+    ref.invalidate(staffEventsProvider);
+    ref.invalidate(scannerBundleProvider);
+    ref.invalidate(bundleFromCacheProvider);
+    ref.invalidate(scanHistoryProvider);
+    ref.invalidate(lastScanProvider);
+    ref.invalidate(syncStatusProvider);
+    ref.invalidate(lastSyncedAtProvider);
+    ref.invalidate(overruledCountProvider);
+    // Cached tickets carry the previous user's QR codes; scans belong to their gate.
     await ref.read(databaseProvider).ticketsDao.deleteAll();
+    await ref.read(databaseProvider).scansDao.deleteAll();
     await Utils.removeAccessToken();
     await Utils.removeUserData();
     await Utils.removeIsLoggedIn();

@@ -18,5 +18,17 @@ class EnvironmentConfig {
 
   /// POST — claim a ticket for an event.
   static String CLAIM_TICKET(String eventId) => 'events/$eventId/tickets';
+
+  /// POST: geofenced self check-in with the phone's location.
+  static String SELF_CHECK_IN(String eventId) => 'events/$eventId/check-in';
+
+  /// Events the user can scan for (organizer or staff).
+  static const String STAFF_EVENTS = 'me/staff-events';
+
+  /// Public key + revoked ticket ids for offline verification.
+  static String SCANNER_BUNDLE(String eventId) => 'events/$eventId/scanner-bundle';
+
+  /// POST: upload queued scans.
+  static String SYNC_SCANS(String eventId) => 'events/$eventId/scans/sync';
   // [MODULE_ENDPOINTS]
 }

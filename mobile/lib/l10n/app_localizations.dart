@@ -343,6 +343,408 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hello, {name}'**
   String text_hello_user(String name);
+
+  /// No description provided for @category_all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get category_all;
+
+  /// No description provided for @category_tech.
+  ///
+  /// In en, this message translates to:
+  /// **'Tech'**
+  String get category_tech;
+
+  /// No description provided for @category_music.
+  ///
+  /// In en, this message translates to:
+  /// **'Music'**
+  String get category_music;
+
+  /// No description provided for @category_sports.
+  ///
+  /// In en, this message translates to:
+  /// **'Sports'**
+  String get category_sports;
+
+  /// No description provided for @category_business.
+  ///
+  /// In en, this message translates to:
+  /// **'Business'**
+  String get category_business;
+
+  /// No description provided for @category_community.
+  ///
+  /// In en, this message translates to:
+  /// **'Community'**
+  String get category_community;
+
+  /// No description provided for @text_discover.
+  ///
+  /// In en, this message translates to:
+  /// **'Find your next event'**
+  String get text_discover;
+
+  /// No description provided for @text_search_events.
+  ///
+  /// In en, this message translates to:
+  /// **'Search events or venues'**
+  String get text_search_events;
+
+  /// No description provided for @text_happening_now.
+  ///
+  /// In en, this message translates to:
+  /// **'Happening now'**
+  String get text_happening_now;
+
+  /// No description provided for @text_upcoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get text_upcoming;
+
+  /// No description provided for @text_past.
+  ///
+  /// In en, this message translates to:
+  /// **'Past'**
+  String get text_past;
+
+  /// No description provided for @text_live_now.
+  ///
+  /// In en, this message translates to:
+  /// **'Live now'**
+  String get text_live_now;
+
+  /// No description provided for @text_spots_left.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} spots left'**
+  String text_spots_left(int count);
+
+  /// No description provided for @text_sold_out.
+  ///
+  /// In en, this message translates to:
+  /// **'Sold out'**
+  String get text_sold_out;
+
+  /// No description provided for @text_no_matching_events.
+  ///
+  /// In en, this message translates to:
+  /// **'No events match your search'**
+  String get text_no_matching_events;
+
+  /// No description provided for @text_about_event.
+  ///
+  /// In en, this message translates to:
+  /// **'About this event'**
+  String get text_about_event;
+
+  /// No description provided for @text_date_time.
+  ///
+  /// In en, this message translates to:
+  /// **'Date and time'**
+  String get text_date_time;
+
+  /// No description provided for @text_venue.
+  ///
+  /// In en, this message translates to:
+  /// **'Venue'**
+  String get text_venue;
+
+  /// No description provided for @text_tickets_claimed.
+  ///
+  /// In en, this message translates to:
+  /// **'{issued} of {capacity} tickets claimed'**
+  String text_tickets_claimed(int issued, int capacity);
+
+  /// No description provided for @text_self_checkin_zone.
+  ///
+  /// In en, this message translates to:
+  /// **'Self check-in works within {distance} of the venue'**
+  String text_self_checkin_zone(String distance);
+
+  /// No description provided for @text_checked_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked in'**
+  String get text_checked_in;
+
+  /// No description provided for @text_checked_in_at.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked in at {time}'**
+  String text_checked_in_at(String time);
+
+  /// No description provided for @text_checked_in_via_qr.
+  ///
+  /// In en, this message translates to:
+  /// **'Scanned at the gate'**
+  String get text_checked_in_via_qr;
+
+  /// No description provided for @text_checked_in_via_geofence.
+  ///
+  /// In en, this message translates to:
+  /// **'Self check-in with location'**
+  String get text_checked_in_via_geofence;
+
+  /// No description provided for @text_starts_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Starts in {time}'**
+  String text_starts_in(String time);
+
+  /// No description provided for @text_ended.
+  ///
+  /// In en, this message translates to:
+  /// **'Ended'**
+  String get text_ended;
+
+  /// No description provided for @text_revoked.
+  ///
+  /// In en, this message translates to:
+  /// **'Revoked'**
+  String get text_revoked;
+
+  /// No description provided for @text_check_in_with_location.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in with my location'**
+  String get text_check_in_with_location;
+
+  /// No description provided for @text_self_checkin_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'At the venue? Check in from your phone and skip the queue.'**
+  String get text_self_checkin_hint;
+
+  /// No description provided for @text_self_checkin_opens.
+  ///
+  /// In en, this message translates to:
+  /// **'Self check-in opens 2 hours before the start'**
+  String get text_self_checkin_opens;
+
+  /// No description provided for @text_welcome_in.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re in! Enjoy the event'**
+  String get text_welcome_in;
+
+  /// No description provided for @text_already_checked_in.
+  ///
+  /// In en, this message translates to:
+  /// **'This ticket was already checked in'**
+  String get text_already_checked_in;
+
+  /// No description provided for @text_location_disabled.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on location services to check in'**
+  String get text_location_disabled;
+
+  /// No description provided for @text_location_denied.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission is needed to check in'**
+  String get text_location_denied;
+
+  /// No description provided for @text_location_denied_forever.
+  ///
+  /// In en, this message translates to:
+  /// **'Location permission is blocked. Enable it in Settings.'**
+  String get text_location_denied_forever;
+
+  /// No description provided for @text_open_settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Open settings'**
+  String get text_open_settings;
+
+  /// No description provided for @text_scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan'**
+  String get text_scan;
+
+  /// No description provided for @text_gate_scanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Gate scanner'**
+  String get text_gate_scanner;
+
+  /// No description provided for @text_staff_events_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Events you can scan tickets for'**
+  String get text_staff_events_hint;
+
+  /// No description provided for @text_no_staff_events.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re not gate staff for any event yet. Ask the organizer to add your email.'**
+  String get text_no_staff_events;
+
+  /// No description provided for @text_role_organizer.
+  ///
+  /// In en, this message translates to:
+  /// **'Organizer'**
+  String get text_role_organizer;
+
+  /// No description provided for @text_role_staff.
+  ///
+  /// In en, this message translates to:
+  /// **'Staff'**
+  String get text_role_staff;
+
+  /// No description provided for @text_gate_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Gate name'**
+  String get text_gate_name;
+
+  /// No description provided for @text_gate_name_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. North gate'**
+  String get text_gate_name_hint;
+
+  /// No description provided for @text_gate_name_help.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown on the organizer\'s dashboard for scans from this phone.'**
+  String get text_gate_name_help;
+
+  /// No description provided for @text_save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get text_save;
+
+  /// No description provided for @text_admitted.
+  ///
+  /// In en, this message translates to:
+  /// **'Admitted'**
+  String get text_admitted;
+
+  /// No description provided for @text_already_used.
+  ///
+  /// In en, this message translates to:
+  /// **'Already used'**
+  String get text_already_used;
+
+  /// No description provided for @text_invalid_ticket.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid ticket'**
+  String get text_invalid_ticket;
+
+  /// No description provided for @text_wrong_event.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket for another event'**
+  String get text_wrong_event;
+
+  /// No description provided for @text_point_camera.
+  ///
+  /// In en, this message translates to:
+  /// **'Point the camera at a ticket QR code'**
+  String get text_point_camera;
+
+  /// No description provided for @text_rejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get text_rejected;
+
+  /// No description provided for @text_pending_sync.
+  ///
+  /// In en, this message translates to:
+  /// **'To sync'**
+  String get text_pending_sync;
+
+  /// No description provided for @text_synced.
+  ///
+  /// In en, this message translates to:
+  /// **'Synced {time}'**
+  String text_synced(String time);
+
+  /// No description provided for @text_syncing.
+  ///
+  /// In en, this message translates to:
+  /// **'Syncing…'**
+  String get text_syncing;
+
+  /// No description provided for @text_offline_mode.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline: scans are saved on this phone'**
+  String get text_offline_mode;
+
+  /// No description provided for @text_sync_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync failed. Will retry.'**
+  String get text_sync_failed;
+
+  /// No description provided for @text_verified_offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified on this phone with the event\'s key · {count} revoked'**
+  String text_verified_offline(int count);
+
+  /// No description provided for @text_overruled.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} admitted here had already been used at another gate'**
+  String text_overruled(int count);
+
+  /// No description provided for @text_scan_history.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan history'**
+  String get text_scan_history;
+
+  /// No description provided for @text_no_scans.
+  ///
+  /// In en, this message translates to:
+  /// **'No scans yet'**
+  String get text_no_scans;
+
+  /// No description provided for @text_camera_error.
+  ///
+  /// In en, this message translates to:
+  /// **'Camera unavailable. Allow camera access in Settings.'**
+  String get text_camera_error;
+
+  /// No description provided for @text_sync_now.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync now'**
+  String get text_sync_now;
+
+  /// No description provided for @text_pending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get text_pending;
+
+  /// No description provided for @text_logout_pending.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} scans haven\'t synced yet and will be lost. Log out anyway?'**
+  String text_logout_pending(int count);
+
+  /// No description provided for @text_scanned_by_server.
+  ///
+  /// In en, this message translates to:
+  /// **'Server: {result}'**
+  String text_scanned_by_server(String result);
+
+  /// No description provided for @text_ready_to_scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready to scan'**
+  String get text_ready_to_scan;
 }
 
 class _AppLocalizationsDelegate

@@ -10,6 +10,7 @@ import 'package:eventpass/utils/colors.dart';
 import 'package:eventpass/utils/strings.dart';
 import 'package:eventpass/providers/api_events_notifier.dart';
 import 'package:eventpass/providers/api_tickets_notifier.dart';
+import 'package:eventpass/providers/api_scanner_notifier.dart';
 // [LOADING_PROVIDER_IMPORTS]
 
 /// Full-screen blocking loader. Place it as the LAST child of a Stack in every
@@ -43,6 +44,7 @@ class LoadingWidgetState extends ConsumerState<LoadingWidget> with TickerProvide
       ref.watch(apiAuthNotifierProvider).states,
       ref.watch(apiEventsNotifierProvider).states,
       ref.watch(apiTicketsNotifierProvider).states,
+      ref.watch(apiScannerNotifierProvider).states,
       // [LOADING_PROVIDERS]
     ];
     return states.contains(States.LOADING);

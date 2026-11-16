@@ -138,4 +138,232 @@ class AppLocalizationsUr extends AppLocalizations {
   String text_hello_user(String name) {
     return 'السلام علیکم، $name';
   }
+
+  @override
+  String get category_all => 'سب';
+
+  @override
+  String get category_tech => 'ٹیک';
+
+  @override
+  String get category_music => 'موسیقی';
+
+  @override
+  String get category_sports => 'کھیل';
+
+  @override
+  String get category_business => 'کاروبار';
+
+  @override
+  String get category_community => 'کمیونٹی';
+
+  @override
+  String get text_discover => 'اپنا اگلا ایونٹ تلاش کریں';
+
+  @override
+  String get text_search_events => 'ایونٹ یا مقام تلاش کریں';
+
+  @override
+  String get text_happening_now => 'ابھی جاری';
+
+  @override
+  String get text_upcoming => 'آنے والے';
+
+  @override
+  String get text_past => 'گزشتہ';
+
+  @override
+  String get text_live_now => 'ابھی جاری';
+
+  @override
+  String text_spots_left(int count) {
+    return '$count جگہیں باقی';
+  }
+
+  @override
+  String get text_sold_out => 'مکمل بک';
+
+  @override
+  String get text_no_matching_events => 'آپ کی تلاش سے کوئی ایونٹ نہیں ملا';
+
+  @override
+  String get text_about_event => 'اس ایونٹ کے بارے میں';
+
+  @override
+  String get text_date_time => 'تاریخ اور وقت';
+
+  @override
+  String get text_venue => 'مقام';
+
+  @override
+  String text_tickets_claimed(int issued, int capacity) {
+    return '$capacity میں سے $issued ٹکٹ لیے جا چکے';
+  }
+
+  @override
+  String text_self_checkin_zone(String distance) {
+    return 'مقام کے $distance کے اندر خود چیک اِن ممکن ہے';
+  }
+
+  @override
+  String get text_checked_in => 'چیک اِن ہو گیا';
+
+  @override
+  String text_checked_in_at(String time) {
+    return '$time پر چیک اِن ہوا';
+  }
+
+  @override
+  String get text_checked_in_via_qr => 'گیٹ پر اسکین ہوا';
+
+  @override
+  String get text_checked_in_via_geofence => 'لوکیشن سے خود چیک اِن';
+
+  @override
+  String text_starts_in(String time) {
+    return '$time میں شروع';
+  }
+
+  @override
+  String get text_ended => 'ختم';
+
+  @override
+  String get text_revoked => 'منسوخ';
+
+  @override
+  String get text_check_in_with_location => 'میری لوکیشن سے چیک اِن کریں';
+
+  @override
+  String get text_self_checkin_hint =>
+      'مقام پر ہیں؟ فون سے چیک اِن کریں اور قطار سے بچیں۔';
+
+  @override
+  String get text_self_checkin_opens =>
+      'خود چیک اِن آغاز سے 2 گھنٹے پہلے کھلتا ہے';
+
+  @override
+  String get text_welcome_in => 'آپ اندر ہیں! ایونٹ کا لطف اٹھائیں';
+
+  @override
+  String get text_already_checked_in => 'یہ ٹکٹ پہلے ہی چیک اِن ہو چکا ہے';
+
+  @override
+  String get text_location_disabled => 'چیک اِن کے لیے لوکیشن آن کریں';
+
+  @override
+  String get text_location_denied => 'چیک اِن کے لیے لوکیشن کی اجازت درکار ہے';
+
+  @override
+  String get text_location_denied_forever =>
+      'لوکیشن کی اجازت بند ہے۔ سیٹنگز میں فعال کریں۔';
+
+  @override
+  String get text_open_settings => 'سیٹنگز کھولیں';
+
+  @override
+  String get text_scan => 'اسکین';
+
+  @override
+  String get text_gate_scanner => 'گیٹ اسکینر';
+
+  @override
+  String get text_staff_events_hint =>
+      'وہ ایونٹس جن کے ٹکٹ آپ اسکین کر سکتے ہیں';
+
+  @override
+  String get text_no_staff_events =>
+      'آپ ابھی کسی ایونٹ کے گیٹ اسٹاف نہیں ہیں۔ منتظم سے اپنی ای میل شامل کروائیں۔';
+
+  @override
+  String get text_role_organizer => 'منتظم';
+
+  @override
+  String get text_role_staff => 'اسٹاف';
+
+  @override
+  String get text_gate_name => 'گیٹ کا نام';
+
+  @override
+  String get text_gate_name_hint => 'مثلاً شمالی گیٹ';
+
+  @override
+  String get text_gate_name_help =>
+      'اس فون کے اسکین منتظم کے ڈیش بورڈ پر اسی نام سے دکھائے جائیں گے۔';
+
+  @override
+  String get text_save => 'محفوظ کریں';
+
+  @override
+  String get text_admitted => 'داخلہ منظور';
+
+  @override
+  String get text_already_used => 'پہلے استعمال ہو چکا';
+
+  @override
+  String get text_invalid_ticket => 'غلط ٹکٹ';
+
+  @override
+  String get text_wrong_event => 'کسی اور ایونٹ کا ٹکٹ';
+
+  @override
+  String get text_point_camera => 'کیمرہ ٹکٹ کے QR کوڈ کی طرف کریں';
+
+  @override
+  String get text_rejected => 'مسترد';
+
+  @override
+  String get text_pending_sync => 'سنک باقی';
+
+  @override
+  String text_synced(String time) {
+    return '$time سنک ہوا';
+  }
+
+  @override
+  String get text_syncing => 'سنک ہو رہا ہے…';
+
+  @override
+  String get text_offline_mode => 'آف لائن: اسکین اس فون پر محفوظ ہیں';
+
+  @override
+  String get text_sync_failed => 'سنک ناکام۔ دوبارہ کوشش ہوگی۔';
+
+  @override
+  String text_verified_offline(int count) {
+    return 'ایونٹ کی کلید سے اسی فون پر تصدیق · $count منسوخ';
+  }
+
+  @override
+  String text_overruled(int count) {
+    return 'یہاں داخل کیے گئے $count ٹکٹ پہلے کسی اور گیٹ پر استعمال ہو چکے تھے';
+  }
+
+  @override
+  String get text_scan_history => 'اسکین کی تاریخ';
+
+  @override
+  String get text_no_scans => 'ابھی کوئی اسکین نہیں';
+
+  @override
+  String get text_camera_error =>
+      'کیمرہ دستیاب نہیں۔ سیٹنگز میں کیمرے کی اجازت دیں۔';
+
+  @override
+  String get text_sync_now => 'ابھی سنک کریں';
+
+  @override
+  String get text_pending => 'باقی';
+
+  @override
+  String text_logout_pending(int count) {
+    return '$count اسکین ابھی سنک نہیں ہوئے اور ضائع ہو جائیں گے۔ پھر بھی لاگ آؤٹ کریں؟';
+  }
+
+  @override
+  String text_scanned_by_server(String result) {
+    return 'سرور: $result';
+  }
+
+  @override
+  String get text_ready_to_scan => 'اسکین کے لیے تیار';
 }

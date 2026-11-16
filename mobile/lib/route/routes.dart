@@ -13,5 +13,8 @@ class Routes {
 
   /// Argument: `Ticket`.
   static const String TICKET_DETAIL = '/ticket-detail';
+
+  /// Argument: `Event` (a staff event).
+  static const String SCANNER = '/scanner';
   // [MODULE_ROUTES]
 }
