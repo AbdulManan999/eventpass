@@ -6,6 +6,8 @@ export class HttpError extends Error {
     readonly statusCode: number,
     readonly code: string,
     message: string,
+    /** Extra fields merged into the JSON error body, e.g. { distanceM }. */
+    readonly details: Record<string, unknown> = {},
   ) {
     super(message);
   }
@@ -25,7 +27,7 @@ export function registerErrorHandler(app: FastifyInstance): void {
       });
     }
     if (err instanceof HttpError) {
-      return reply.status(err.statusCode).send({ error: err.code, message: err.message });
+      return reply.status(err.statusCode).send({ error: err.code, message: err.message, ...err.details });
     }
     const status = (err as { statusCode?: number }).statusCode;
     if (status && status < 500) {

@@ -62,8 +62,7 @@ describe.skipIf(!databaseUrl)('EventPass API', () => {
     return res.body.token as string;
   };
 
-  const createEvent = async (organizerToken: string, capacity = 100) => {
-    const startsAt = new Date(Date.now() + 86_400_000);
+  const createEvent = async (organizerToken: string, capacity = 100, startsAt = new Date(Date.now() + 86_400_000)) => {
     const res = await call('POST', '/events', organizerToken, {
       title: 'Lahore Flutter Meetup',
       venueName: 'Arfa Software Technology Park',
@@ -119,7 +118,20 @@ describe.skipIf(!databaseUrl)('EventPass API', () => {
     expect(retry.body.results[0].result).toBe('accepted');
 
     const stats = await call('GET', `/events/${eventId}/stats`, organizer);
-    expect(stats.body).toEqual({ capacity: 100, issued: 1, revoked: 0, checkedIn: 1, rejectedScans: 2 });
+    expect(stats.body).toMatchObject({
+      capacity: 100,
+      issued: 1,
+      revoked: 0,
+      checkedIn: 1,
+      rejectedScans: 2,
+      byMethod: { qr: 1, geofence: 0 },
+      gates: [{ deviceId: 'gate-1', scans: 3, accepted: 1 }],
+    });
+    expect(stats.body.timeline).toEqual([{ at: expect.any(String), checkIns: 1 }]);
+
+    // The attendee sees the check-in on their ticket.
+    const mine = await call('GET', '/me/tickets', attendee);
+    expect(mine.body[0]).toMatchObject({ checkedInAt: '2026-01-01T10:00:00.000Z', checkInMethod: 'qr' });
   });
 
   it('rejects revoked tickets and lists them in the scanner bundle', async () => {
@@ -163,5 +175,109 @@ describe.skipIf(!databaseUrl)('EventPass API', () => {
 
     expect((await call('GET', '/events/not-a-uuid')).status).toBe(404);
     expect((await call('POST', '/auth/login', undefined, { email: 'usman@example.com', password: 'wrong' })).status).toBe(401);
+  });
+
+  describe('geofenced self check-in', () => {
+    // Arfa Software Technology Park, Lahore; the default geofence is 200 m.
+    const venue = { latitude: 31.4757, longitude: 74.3424 };
+    const inside = { latitude: 31.4766, longitude: 74.3424, accuracyM: 15 }; // ~100 m north
+    const outside = { latitude: 31.5204, longitude: 74.3587, accuracyM: 15 }; // ~5 km away
+
+    const setup = async (name: string, startsInMs: number) => {
+      const organizer = await register(`${name}Org`, 'organizer');
+      const attendee = await register(name);
+      const eventId = await createEvent(organizer, 100, new Date(Date.now() + startsInMs));
+      await call('POST', `/events/${eventId}/tickets`, attendee);
+      return { organizer, attendee, eventId };
+    };
+
+    it('checks in an attendee inside the radius, once', async () => {
+      const { organizer, attendee, eventId } = await setup('Hina', -30 * 60_000);
+
+      const far = await call('POST', `/events/${eventId}/check-in`, attendee, outside);
+      expect(far.status).toBe(422);
+      expect(far.body).toMatchObject({ error: 'outside_geofence', radiusM: 200 });
+      expect(far.body.distanceM).toBeGreaterThan(4000);
+
+      const near = await call('POST', `/events/${eventId}/check-in`, attendee, inside);
+      expect(near.status).toBe(201);
+      expect(near.body).toMatchObject({ status: 'checked_in', method: 'geofence' });
+      expect(near.body.distanceM).toBeLessThan(200);
+
+      const again = await call('POST', `/events/${eventId}/check-in`, attendee, inside);
+      expect(again.status).toBe(200);
+      expect(again.body.status).toBe('already_checked_in');
+
+      // A gate scan of the same ticket afterwards is a duplicate, not a second entry.
+      const [ticket] = (await call('GET', '/me/tickets', attendee)).body;
+      expect(ticket).toMatchObject({ checkInMethod: 'geofence' });
+      const sync = await call('POST', `/events/${eventId}/scans/sync`, organizer, {
+        deviceId: 'gate-1',
+        scans: [{ id: randomUUID(), token: ticket.token, scannedAt: new Date().toISOString() }],
+      });
+      expect(sync.body.results[0].result).toBe('duplicate');
+
+      const stats = await call('GET', `/events/${eventId}/stats`, organizer);
+      expect(stats.body).toMatchObject({ checkedIn: 1, byMethod: { qr: 0, geofence: 1 } });
+    });
+
+    it('rejects check-ins that are too early, imprecise, mocked or without a ticket', async () => {
+      const early = await setup('Ali', 5 * 3_600_000);
+      const tooEarly = await call('POST', `/events/${early.eventId}/check-in`, early.attendee, { ...venue, accuracyM: 5 });
+      expect(tooEarly.status).toBe(409);
+      expect(tooEarly.body.error).toBe('too_early');
+
+      const live = await setup('Zara', -10 * 60_000);
+      const vague = await call('POST', `/events/${live.eventId}/check-in`, live.attendee, { ...venue, accuracyM: 900 });
+      expect(vague.body.error).toBe('location_imprecise');
+      const mocked = await call('POST', `/events/${live.eventId}/check-in`, live.attendee, { ...inside, isMocked: true });
+      expect(mocked.body.error).toBe('mock_location');
+
+      const stranger = await register('Stranger');
+      const noTicket = await call('POST', `/events/${live.eventId}/check-in`, stranger, inside);
+      expect(noTicket.status).toBe(403);
+    });
+  });
+
+  it('gives organizers an attendee list, scan feed, staff list and their events', async () => {
+    const organizer = await register('Boss', 'organizer');
+    const otherOrganizer = await register('Rival', 'organizer');
+    const staff = await register('Kamran');
+    const eventId = await createEvent(organizer);
+    const tickets = [];
+    for (const name of ['Ayesha', 'Fahad']) {
+      tickets.push((await call('POST', `/events/${eventId}/tickets`, await register(name))).body);
+    }
+    await call('POST', `/events/${eventId}/staff`, organizer, { email: 'kamran@example.com' });
+    await call('POST', `/events/${eventId}/scans/sync`, staff, {
+      deviceId: 'north-gate',
+      scans: [{ id: randomUUID(), token: tickets[0].token, scannedAt: new Date().toISOString() }],
+    });
+
+    const list = await call('GET', `/events/${eventId}/tickets?q=ayesha`, organizer);
+    expect(list.body).toEqual([
+      expect.objectContaining({ holder: { name: 'Ayesha', email: 'ayesha@example.com' }, checkInMethod: 'qr' }),
+    ]);
+    const feed = await call('GET', `/events/${eventId}/scans`, organizer);
+    expect(feed.body[0]).toMatchObject({ result: 'accepted', scannedBy: 'Kamran', holderName: 'Ayesha', deviceId: 'north-gate' });
+
+    const staffList = await call('GET', `/events/${eventId}/staff`, organizer);
+    expect(staffList.body).toEqual([expect.objectContaining({ name: 'Kamran', scans: 1 })]);
+    expect((await call('GET', '/me/staff-events', staff)).body).toEqual([expect.objectContaining({ id: eventId, role: 'staff' })]);
+
+    const mine = await call('GET', '/organizer/events', organizer);
+    expect(mine.body).toEqual([expect.objectContaining({ id: eventId, ticketsIssued: 2, checkedIn: 1 })]);
+
+    // Another organizer can't read this event's data.
+    expect((await call('GET', `/events/${eventId}/tickets`, otherOrganizer)).status).toBe(403);
+    expect((await call('GET', `/events/${eventId}/scans`, otherOrganizer)).status).toBe(403);
+
+    const removed = await app.inject({
+      method: 'DELETE',
+      url: `/events/${eventId}/staff/${staffList.body[0].userId}`,
+      headers: { authorization: `Bearer ${organizer}` },
+    });
+    expect(removed.statusCode).toBe(204);
+    expect((await call('GET', `/events/${eventId}/scanner-bundle`, staff)).status).toBe(403);
   });
 });
