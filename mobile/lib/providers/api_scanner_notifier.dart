@@ -82,11 +82,11 @@ class ApiScannerNotifier extends StateNotifier<ApiStatesModel> {
     }
   }
 
-  /// Verifies a QR code offline and queues it, then tries to sync in the background.
-  Future<QueuedScan?> scan(String token) async {
+  /// Verifies a ticket offline and queues it, then tries to sync in the background.
+  Future<QueuedScan?> scan(String token, {String method = ScanMethods.qr}) async {
     final bundle = _ref.read(scannerBundleProvider);
     if (bundle == null) return null;
-    final scan = await _ref.read(scannerRepository).scan(bundle, token);
+    final scan = await _ref.read(scannerRepository).scan(bundle, token, method: method);
     _ref.read(lastScanProvider.notifier).state = scan;
     await _refreshHistory(bundle.event!.id!);
     unawaited(apiSync());

@@ -16,5 +16,8 @@ class Routes {
 
   /// Argument: `Event` (a staff event).
   static const String SCANNER = '/scanner';
+
+  /// Argument: `Ticket`. The phone acts as an NFC ticket for the gate.
+  static const String TAP_PASS = '/tap-pass';
   // [MODULE_ROUTES]
 }

@@ -10,6 +10,7 @@ class ScanQueueTable extends Table {
   TextColumn get token => text()();
   TextColumn get scannedAt => text()();
   TextColumn get localResult => text()();
+  TextColumn get method => text().withDefault(const Constant('qr'))();
   TextColumn get ticketId => text().nullable()();
   TextColumn get holderName => text().nullable()();
   TextColumn get serverResult => text().nullable()();

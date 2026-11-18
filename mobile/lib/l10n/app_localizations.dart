@@ -745,6 +745,228 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Ready to scan'**
   String get text_ready_to_scan;
+
+  /// No description provided for @text_scan_mode_qr.
+  ///
+  /// In en, this message translates to:
+  /// **'QR code'**
+  String get text_scan_mode_qr;
+
+  /// No description provided for @text_scan_mode_nfc.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC tap'**
+  String get text_scan_mode_nfc;
+
+  /// No description provided for @text_nfc_ready.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready for taps'**
+  String get text_nfc_ready;
+
+  /// No description provided for @text_nfc_hold_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold a wristband or phone to the back of this phone'**
+  String get text_nfc_hold_hint;
+
+  /// No description provided for @text_nfc_wristbands.
+  ///
+  /// In en, this message translates to:
+  /// **'Wristbands'**
+  String get text_nfc_wristbands;
+
+  /// No description provided for @text_nfc_phones.
+  ///
+  /// In en, this message translates to:
+  /// **'Phones'**
+  String get text_nfc_phones;
+
+  /// No description provided for @text_nfc_cards.
+  ///
+  /// In en, this message translates to:
+  /// **'Cards & stickers'**
+  String get text_nfc_cards;
+
+  /// No description provided for @text_nfc_off.
+  ///
+  /// In en, this message translates to:
+  /// **'NFC is turned off'**
+  String get text_nfc_off;
+
+  /// No description provided for @text_nfc_off_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on NFC to check tickets with a tap.'**
+  String get text_nfc_off_hint;
+
+  /// No description provided for @text_turn_on_nfc.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn on NFC'**
+  String get text_turn_on_nfc;
+
+  /// No description provided for @text_nfc_unsupported.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone has no NFC. Use QR scanning instead.'**
+  String get text_nfc_unsupported;
+
+  /// No description provided for @text_nfc_start_reading.
+  ///
+  /// In en, this message translates to:
+  /// **'Start reading'**
+  String get text_nfc_start_reading;
+
+  /// No description provided for @text_nfc_no_ticket.
+  ///
+  /// In en, this message translates to:
+  /// **'No EventPass ticket on this tag'**
+  String get text_nfc_no_ticket;
+
+  /// No description provided for @text_nfc_check_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Check in with NFC'**
+  String get text_nfc_check_in;
+
+  /// No description provided for @text_tap_phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap your phone'**
+  String get text_tap_phone;
+
+  /// No description provided for @text_tap_phone_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Your phone becomes the ticket'**
+  String get text_tap_phone_hint;
+
+  /// No description provided for @text_save_to_wristband.
+  ///
+  /// In en, this message translates to:
+  /// **'Save to wristband'**
+  String get text_save_to_wristband;
+
+  /// No description provided for @text_save_to_wristband_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write it to an NFC band or sticker'**
+  String get text_save_to_wristband_hint;
+
+  /// No description provided for @text_tap_to_check_in.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to check in'**
+  String get text_tap_to_check_in;
+
+  /// No description provided for @text_tap_waiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the back of your phone to the gate phone'**
+  String get text_tap_waiting;
+
+  /// No description provided for @text_tap_step_open.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep this screen open'**
+  String get text_tap_step_open;
+
+  /// No description provided for @text_tap_step_hold.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold the phones back to back'**
+  String get text_tap_step_hold;
+
+  /// No description provided for @text_tap_step_buzz.
+  ///
+  /// In en, this message translates to:
+  /// **'Wait for the buzz'**
+  String get text_tap_step_buzz;
+
+  /// No description provided for @text_tap_sent.
+  ///
+  /// In en, this message translates to:
+  /// **'Ticket sent to the gate'**
+  String get text_tap_sent;
+
+  /// No description provided for @text_tap_waiting_confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the gate to confirm…'**
+  String get text_tap_waiting_confirm;
+
+  /// No description provided for @text_tap_sent_offline.
+  ///
+  /// In en, this message translates to:
+  /// **'The gate has your ticket. It will confirm once it syncs.'**
+  String get text_tap_sent_offline;
+
+  /// No description provided for @text_youre_in.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re in!'**
+  String get text_youre_in;
+
+  /// No description provided for @text_tap_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'This phone couldn\'t start NFC. Show your QR code instead.'**
+  String get text_tap_failed;
+
+  /// No description provided for @text_write_waiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Hold a blank NFC wristband or sticker to your phone'**
+  String get text_write_waiting;
+
+  /// No description provided for @text_write_tag_size.
+  ///
+  /// In en, this message translates to:
+  /// **'Works with NTAG215 or larger'**
+  String get text_write_tag_size;
+
+  /// No description provided for @text_write_success.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved! Tap the wristband at the gate.'**
+  String get text_write_success;
+
+  /// No description provided for @text_write_too_small.
+  ///
+  /// In en, this message translates to:
+  /// **'This tag is too small for a ticket. Use an NTAG215 or larger.'**
+  String get text_write_too_small;
+
+  /// No description provided for @text_write_read_only.
+  ///
+  /// In en, this message translates to:
+  /// **'This tag is locked and can\'t be written.'**
+  String get text_write_read_only;
+
+  /// No description provided for @text_write_not_ndef.
+  ///
+  /// In en, this message translates to:
+  /// **'This tag isn\'t supported. Try an NFC sticker or wristband.'**
+  String get text_write_not_ndef;
+
+  /// No description provided for @text_write_failed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t write the tag. Hold it still and try again.'**
+  String get text_write_failed;
+
+  /// No description provided for @text_checked_in_via_nfc.
+  ///
+  /// In en, this message translates to:
+  /// **'Checked in with an NFC tap'**
+  String get text_checked_in_via_nfc;
+
+  /// No description provided for @text_done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get text_done;
 }
 
 class _AppLocalizationsDelegate

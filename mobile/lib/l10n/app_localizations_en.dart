@@ -367,4 +367,126 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get text_ready_to_scan => 'Ready to scan';
+
+  @override
+  String get text_scan_mode_qr => 'QR code';
+
+  @override
+  String get text_scan_mode_nfc => 'NFC tap';
+
+  @override
+  String get text_nfc_ready => 'Ready for taps';
+
+  @override
+  String get text_nfc_hold_hint =>
+      'Hold a wristband or phone to the back of this phone';
+
+  @override
+  String get text_nfc_wristbands => 'Wristbands';
+
+  @override
+  String get text_nfc_phones => 'Phones';
+
+  @override
+  String get text_nfc_cards => 'Cards & stickers';
+
+  @override
+  String get text_nfc_off => 'NFC is turned off';
+
+  @override
+  String get text_nfc_off_hint => 'Turn on NFC to check tickets with a tap.';
+
+  @override
+  String get text_turn_on_nfc => 'Turn on NFC';
+
+  @override
+  String get text_nfc_unsupported =>
+      'This phone has no NFC. Use QR scanning instead.';
+
+  @override
+  String get text_nfc_start_reading => 'Start reading';
+
+  @override
+  String get text_nfc_no_ticket => 'No EventPass ticket on this tag';
+
+  @override
+  String get text_nfc_check_in => 'Check in with NFC';
+
+  @override
+  String get text_tap_phone => 'Tap your phone';
+
+  @override
+  String get text_tap_phone_hint => 'Your phone becomes the ticket';
+
+  @override
+  String get text_save_to_wristband => 'Save to wristband';
+
+  @override
+  String get text_save_to_wristband_hint =>
+      'Write it to an NFC band or sticker';
+
+  @override
+  String get text_tap_to_check_in => 'Tap to check in';
+
+  @override
+  String get text_tap_waiting =>
+      'Hold the back of your phone to the gate phone';
+
+  @override
+  String get text_tap_step_open => 'Keep this screen open';
+
+  @override
+  String get text_tap_step_hold => 'Hold the phones back to back';
+
+  @override
+  String get text_tap_step_buzz => 'Wait for the buzz';
+
+  @override
+  String get text_tap_sent => 'Ticket sent to the gate';
+
+  @override
+  String get text_tap_waiting_confirm => 'Waiting for the gate to confirm…';
+
+  @override
+  String get text_tap_sent_offline =>
+      'The gate has your ticket. It will confirm once it syncs.';
+
+  @override
+  String get text_youre_in => 'You\'re in!';
+
+  @override
+  String get text_tap_failed =>
+      'This phone couldn\'t start NFC. Show your QR code instead.';
+
+  @override
+  String get text_write_waiting =>
+      'Hold a blank NFC wristband or sticker to your phone';
+
+  @override
+  String get text_write_tag_size => 'Works with NTAG215 or larger';
+
+  @override
+  String get text_write_success => 'Saved! Tap the wristband at the gate.';
+
+  @override
+  String get text_write_too_small =>
+      'This tag is too small for a ticket. Use an NTAG215 or larger.';
+
+  @override
+  String get text_write_read_only =>
+      'This tag is locked and can\'t be written.';
+
+  @override
+  String get text_write_not_ndef =>
+      'This tag isn\'t supported. Try an NFC sticker or wristband.';
+
+  @override
+  String get text_write_failed =>
+      'Couldn\'t write the tag. Hold it still and try again.';
+
+  @override
+  String get text_checked_in_via_nfc => 'Checked in with an NFC tap';
+
+  @override
+  String get text_done => 'Done';
 }

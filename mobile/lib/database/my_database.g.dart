@@ -383,6 +383,16 @@ class $ScanQueueTableTable extends ScanQueueTable
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
+  static const VerificationMeta _methodMeta = const VerificationMeta('method');
+  @override
+  late final GeneratedColumn<String> method = GeneratedColumn<String>(
+    'method',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('qr'),
+  );
   static const VerificationMeta _ticketIdMeta = const VerificationMeta(
     'ticketId',
   );
@@ -434,6 +444,7 @@ class $ScanQueueTableTable extends ScanQueueTable
     token,
     scannedAt,
     localResult,
+    method,
     ticketId,
     holderName,
     serverResult,
@@ -491,6 +502,12 @@ class $ScanQueueTableTable extends ScanQueueTable
     } else if (isInserting) {
       context.missing(_localResultMeta);
     }
+    if (data.containsKey('method')) {
+      context.handle(
+        _methodMeta,
+        method.isAcceptableOrUnknown(data['method']!, _methodMeta),
+      );
+    }
     if (data.containsKey('ticket_id')) {
       context.handle(
         _ticketIdMeta,
@@ -547,6 +564,10 @@ class $ScanQueueTableTable extends ScanQueueTable
         DriftSqlType.string,
         data['${effectivePrefix}local_result'],
       )!,
+      method: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}method'],
+      )!,
       ticketId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}ticket_id'],
@@ -578,6 +599,7 @@ class ScanQueueTableCompanion extends UpdateCompanion<QueuedScan> {
   final Value<String> token;
   final Value<String> scannedAt;
   final Value<String> localResult;
+  final Value<String> method;
   final Value<String?> ticketId;
   final Value<String?> holderName;
   final Value<String?> serverResult;
@@ -589,6 +611,7 @@ class ScanQueueTableCompanion extends UpdateCompanion<QueuedScan> {
     this.token = const Value.absent(),
     this.scannedAt = const Value.absent(),
     this.localResult = const Value.absent(),
+    this.method = const Value.absent(),
     this.ticketId = const Value.absent(),
     this.holderName = const Value.absent(),
     this.serverResult = const Value.absent(),
@@ -601,6 +624,7 @@ class ScanQueueTableCompanion extends UpdateCompanion<QueuedScan> {
     required String token,
     required String scannedAt,
     required String localResult,
+    this.method = const Value.absent(),
     this.ticketId = const Value.absent(),
     this.holderName = const Value.absent(),
     this.serverResult = const Value.absent(),
@@ -617,6 +641,7 @@ class ScanQueueTableCompanion extends UpdateCompanion<QueuedScan> {
     Expression<String>? token,
     Expression<String>? scannedAt,
     Expression<String>? localResult,
+    Expression<String>? method,
     Expression<String>? ticketId,
     Expression<String>? holderName,
     Expression<String>? serverResult,
@@ -629,6 +654,7 @@ class ScanQueueTableCompanion extends UpdateCompanion<QueuedScan> {
       if (token != null) 'token': token,
       if (scannedAt != null) 'scanned_at': scannedAt,
       if (localResult != null) 'local_result': localResult,
+      if (method != null) 'method': method,
       if (ticketId != null) 'ticket_id': ticketId,
       if (holderName != null) 'holder_name': holderName,
       if (serverResult != null) 'server_result': serverResult,
@@ -643,6 +669,7 @@ class ScanQueueTableCompanion extends UpdateCompanion<QueuedScan> {
     Value<String>? token,
     Value<String>? scannedAt,
     Value<String>? localResult,
+    Value<String>? method,
     Value<String?>? ticketId,
     Value<String?>? holderName,
     Value<String?>? serverResult,
@@ -655,6 +682,7 @@ class ScanQueueTableCompanion extends UpdateCompanion<QueuedScan> {
       token: token ?? this.token,
       scannedAt: scannedAt ?? this.scannedAt,
       localResult: localResult ?? this.localResult,
+      method: method ?? this.method,
       ticketId: ticketId ?? this.ticketId,
       holderName: holderName ?? this.holderName,
       serverResult: serverResult ?? this.serverResult,
@@ -680,6 +708,9 @@ class ScanQueueTableCompanion extends UpdateCompanion<QueuedScan> {
     }
     if (localResult.present) {
       map['local_result'] = Variable<String>(localResult.value);
+    }
+    if (method.present) {
+      map['method'] = Variable<String>(method.value);
     }
     if (ticketId.present) {
       map['ticket_id'] = Variable<String>(ticketId.value);
@@ -707,6 +738,7 @@ class ScanQueueTableCompanion extends UpdateCompanion<QueuedScan> {
           ..write('token: $token, ')
           ..write('scannedAt: $scannedAt, ')
           ..write('localResult: $localResult, ')
+          ..write('method: $method, ')
           ..write('ticketId: $ticketId, ')
           ..write('holderName: $holderName, ')
           ..write('serverResult: $serverResult, ')
@@ -1138,6 +1170,7 @@ typedef $$ScanQueueTableTableCreateCompanionBuilder =
       required String token,
       required String scannedAt,
       required String localResult,
+      Value<String> method,
       Value<String?> ticketId,
       Value<String?> holderName,
       Value<String?> serverResult,
@@ -1151,6 +1184,7 @@ typedef $$ScanQueueTableTableUpdateCompanionBuilder =
       Value<String> token,
       Value<String> scannedAt,
       Value<String> localResult,
+      Value<String> method,
       Value<String?> ticketId,
       Value<String?> holderName,
       Value<String?> serverResult,
@@ -1189,6 +1223,11 @@ class $$ScanQueueTableTableFilterComposer
 
   ColumnFilters<String> get localResult => $composableBuilder(
     column: $table.localResult,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get method => $composableBuilder(
+    column: $table.method,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1247,6 +1286,11 @@ class $$ScanQueueTableTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get method => $composableBuilder(
+    column: $table.method,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get ticketId => $composableBuilder(
     column: $table.ticketId,
     builder: (column) => ColumnOrderings(column),
@@ -1293,6 +1337,9 @@ class $$ScanQueueTableTableAnnotationComposer
     column: $table.localResult,
     builder: (column) => column,
   );
+
+  GeneratedColumn<String> get method =>
+      $composableBuilder(column: $table.method, builder: (column) => column);
 
   GeneratedColumn<String> get ticketId =>
       $composableBuilder(column: $table.ticketId, builder: (column) => column);
@@ -1347,6 +1394,7 @@ class $$ScanQueueTableTableTableManager
                 Value<String> token = const Value.absent(),
                 Value<String> scannedAt = const Value.absent(),
                 Value<String> localResult = const Value.absent(),
+                Value<String> method = const Value.absent(),
                 Value<String?> ticketId = const Value.absent(),
                 Value<String?> holderName = const Value.absent(),
                 Value<String?> serverResult = const Value.absent(),
@@ -1358,6 +1406,7 @@ class $$ScanQueueTableTableTableManager
                 token: token,
                 scannedAt: scannedAt,
                 localResult: localResult,
+                method: method,
                 ticketId: ticketId,
                 holderName: holderName,
                 serverResult: serverResult,
@@ -1371,6 +1420,7 @@ class $$ScanQueueTableTableTableManager
                 required String token,
                 required String scannedAt,
                 required String localResult,
+                Value<String> method = const Value.absent(),
                 Value<String?> ticketId = const Value.absent(),
                 Value<String?> holderName = const Value.absent(),
                 Value<String?> serverResult = const Value.absent(),
@@ -1382,6 +1432,7 @@ class $$ScanQueueTableTableTableManager
                 token: token,
                 scannedAt: scannedAt,
                 localResult: localResult,
+                method: method,
                 ticketId: ticketId,
                 holderName: holderName,
                 serverResult: serverResult,

@@ -30,6 +30,7 @@ class ScansDao extends DatabaseAccessor<MyDatabase> with _$ScansDaoMixin impleme
           token: scan.token,
           scannedAt: scan.scannedAt,
           localResult: scan.localResult,
+          method: Value(scan.method),
           ticketId: Value(scan.ticketId),
           holderName: Value(scan.holderName),
         ),

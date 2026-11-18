@@ -85,7 +85,8 @@ class _ScannerRepository {
   }
 
   /// Verifies [rawToken] offline and records the scan. Never touches the network.
-  Future<QueuedScan> scan(ScannerBundle bundle, String rawToken, {DateTime? now}) async {
+  /// [method] says how the gate read it: camera or NFC tap.
+  Future<QueuedScan> scan(ScannerBundle bundle, String rawToken, {DateTime? now, String method = ScanMethods.qr}) async {
     final dao = ref.read(databaseProvider).scansDao;
     final eventId = bundle.event!.id!;
     final token = rawToken.length > _maxTokenLength ? rawToken.substring(0, _maxTokenLength) : rawToken;
@@ -108,6 +109,7 @@ class _ScannerRepository {
       token: token,
       scannedAt: (now ?? DateTime.now()).toUtc().toIso8601String(),
       localResult: result,
+      method: method,
       ticketId: ticketId,
       holderName: verified.claims?.holderName,
     );
@@ -135,7 +137,7 @@ class _ScannerRepository {
               data: {
                 'deviceId': gate,
                 'scans': [
-                  for (final s in batch) {'id': s.id, 'token': s.token, 'scannedAt': s.scannedAt},
+                  for (final s in batch) {'id': s.id, 'token': s.token, 'scannedAt': s.scannedAt, 'method': s.method},
                 ],
               },
             );

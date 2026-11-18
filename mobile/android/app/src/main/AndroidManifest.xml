@@ -5,7 +5,12 @@
     <!-- Geofenced self check-in reads one location fix on demand. -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- NFC check-in: gate phones read tickets from wristbands and phones, and
+         attendee phones can act as an NFC ticket (host card emulation). -->
+    <uses-permission android:name="android.permission.NFC"/>
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-feature android:name="android.hardware.nfc" android:required="false"/>
+    <uses-feature android:name="android.hardware.nfc.hce" android:required="false"/>
     <application
         android:label="EventPass"
         android:name="${applicationName}"
@@ -32,6 +37,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- Answers NFC readers as a Type 4 Tag while the ticket's tap screen is open. -->
+        <service
+            android:name=".nfc.TicketHceService"
+            android:exported="true"
+            android:permission="android.permission.BIND_NFC_SERVICE">
+            <intent-filter>
+                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.nfc.cardemulation.host_apdu_service"
+                android:resource="@xml/ticket_apdu_service"/>
+        </service>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data

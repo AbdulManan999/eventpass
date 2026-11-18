@@ -8,6 +8,7 @@ import 'package:eventpass/views/login/login_screen.dart';
 import 'package:eventpass/views/register/register_screen.dart';
 import 'package:eventpass/views/scanner/scanner_screen.dart';
 import 'package:eventpass/views/splash/splash_screen.dart';
+import 'package:eventpass/views/tap_pass/tap_pass_screen.dart';
 import 'package:eventpass/views/ticket_detail/ticket_detail_screen.dart';
 // [MODULE_ROUTE_IMPORTS]
 
@@ -41,6 +42,23 @@ class RouteGenerator {
       case Routes.SCANNER:
         if (args is! Event) return _errorRoute(settings.name, args);
         return MaterialPageRoute<dynamic>(builder: (_) => ScannerScreen(event: args));
+
+      case Routes.TAP_PASS:
+        if (args is! Ticket) return _errorRoute(settings.name, args);
+        // Zooms up out of the ticket, like the pass coming alive.
+        return PageRouteBuilder<dynamic>(
+          settings: settings,
+          transitionDuration: const Duration(milliseconds: 500),
+          reverseTransitionDuration: const Duration(milliseconds: 350),
+          pageBuilder: (_, _, _) => TapPassScreen(ticket: args),
+          transitionsBuilder: (_, animation, _, child) {
+            final curved = CurvedAnimation(parent: animation, curve: Curves.easeOutCubic);
+            return FadeTransition(
+              opacity: curved,
+              child: ScaleTransition(scale: Tween(begin: 0.88, end: 1.0).animate(curved), child: child),
+            );
+          },
+        );
 
       // [MODULE_ROUTE_CASES]
 

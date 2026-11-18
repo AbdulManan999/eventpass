@@ -68,6 +68,12 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Gate staff use the camera to scan ticket QR codes.</string>
+	<key>NFCReaderUsageDescription</key>
+	<string>Gate staff read tickets from NFC wristbands and phones, and attendees can save their ticket to an NFC wristband.</string>
+	<key>com.apple.developer.nfc.readersession.iso7816.select-identifiers</key>
+	<array>
+		<string>D2760000850101</string>
+	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Your location is checked once to confirm you are at the venue for self check-in.</string>
 </dict>

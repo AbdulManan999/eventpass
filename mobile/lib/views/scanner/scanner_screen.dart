@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:eventpass/l10n/app_localizations.dart';
 import 'package:eventpass/localization/app_localization_context.dart';
 import 'package:eventpass/models/Event.dart';
 import 'package:eventpass/models/QueuedScan.dart';
@@ -14,13 +14,17 @@ import 'package:eventpass/network/api_state_model.dart';
 import 'package:eventpass/providers/api_scanner_notifier.dart';
 import 'package:eventpass/utils/colors.dart';
 import 'package:eventpass/utils/utils.dart';
+import 'package:eventpass/views/scanner/nfc_reader_view.dart';
+import 'package:eventpass/views/scanner/scan_result_overlay.dart';
 import 'package:eventpass/widgets/loading_widget.dart';
+import 'package:eventpass/widgets/segmented_pill.dart';
 import 'package:eventpass/widgets/session_expired_handler.dart';
 import 'package:eventpass/widgets/status_view.dart';
 
-/// Gate scanner. Verifies each QR code on the phone in milliseconds, saves the
-/// scan locally, and syncs in the background, so the line keeps moving with
-/// no connection at all.
+/// Gate scanner. Reads a ticket from a QR code (camera) or an NFC tap
+/// (wristband, sticker or phone), verifies it on the phone in milliseconds,
+/// saves the scan locally, and syncs in the background, so the line keeps
+/// moving with no connection at all.
 class ScannerScreen extends ConsumerStatefulWidget {
   const ScannerScreen({super.key, required this.event});
 
@@ -35,6 +39,7 @@ class ScannerScreenState extends ConsumerState<ScannerScreen> {
   Timer? _syncTimer;
   Timer? _hideResult;
   bool _showResult = false;
+  String _mode = ScanMethods.qr;
   String? _lastValue;
   DateTime _lastValueAt = DateTime.fromMillisecondsSinceEpoch(0);
 
@@ -57,16 +62,21 @@ class ScannerScreenState extends ConsumerState<ScannerScreen> {
     super.dispose();
   }
 
-  Future<void> _onDetect(BarcodeCapture capture) async {
+  void _onDetect(BarcodeCapture capture) {
     final value = capture.barcodes.firstOrNull?.rawValue;
-    if (value == null || _showResult) return;
+    if (value != null) _handle(value, ScanMethods.qr);
+  }
+
+  /// Verifies a ticket read by either method and shows the verdict.
+  Future<void> _handle(String value, String method) async {
+    if (_showResult) return;
     final now = DateTime.now();
     if (value == _lastValue && now.difference(_lastValueAt) < _sameCodeCooldown) return;
     _lastValue = value;
     _lastValueAt = now;
 
     setState(() => _showResult = true);
-    final scan = await ref.read(apiScannerNotifierProvider.notifier).scan(value);
+    final scan = await ref.read(apiScannerNotifierProvider.notifier).scan(value, method: method);
     if (scan == null) return;
     scan.admitted ? HapticFeedback.lightImpact() : HapticFeedback.heavyImpact();
     SystemSound.play(SystemSoundType.click);
@@ -90,6 +100,7 @@ class ScannerScreenState extends ConsumerState<ScannerScreen> {
     final bundle = ref.watch(scannerBundleProvider);
     final history = ref.watch(scanHistoryProvider);
     final pending = history.where((s) => !s.isSynced).length;
+    final lastScan = ref.watch(lastScanProvider);
 
     return Scaffold(
       backgroundColor: blackColor,
@@ -103,9 +114,12 @@ class ScannerScreenState extends ConsumerState<ScannerScreen> {
           ],
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.flashlight_on_outlined),
-            onPressed: _camera.toggleTorch,
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            transitionBuilder: (child, a) => ScaleTransition(scale: a, child: child),
+            child: _mode == ScanMethods.qr
+                ? IconButton(key: const ValueKey('torch'), icon: const Icon(Icons.flashlight_on_outlined), onPressed: _camera.toggleTorch)
+                : const SizedBox.shrink(),
           ),
           IconButton(
             tooltip: loc.text_scan_history,
@@ -129,32 +143,44 @@ class ScannerScreenState extends ConsumerState<ScannerScreen> {
           : Column(
               children: [
                 _statusStrip(),
+                Container(
+                  color: darkSurfaceColor,
+                  padding: EdgeInsets.fromLTRB(16.w, 0, 16.w, 12.h),
+                  child: SegmentedPill<String>(
+                    value: _mode,
+                    onChanged: (m) {
+                      if (m == _mode) return;
+                      HapticFeedback.selectionClick();
+                      setState(() => _mode = m);
+                    },
+                    options: [
+                      PillOption(ScanMethods.qr, Icons.qr_code_scanner_rounded, loc.text_scan_mode_qr),
+                      PillOption(ScanMethods.nfc, Icons.contactless_rounded, loc.text_scan_mode_nfc),
+                    ],
+                  ),
+                ),
                 Expanded(
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      MobileScanner(
-                        controller: _camera,
-                        onDetect: _onDetect,
-                        errorBuilder: (context, error) => Theme(
-                          data: ThemeData.dark(),
-                          child: StatusView(icon: Icons.no_photography_outlined, message: loc.text_camera_error),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 450),
+                        switchInCurve: Curves.easeOutCubic,
+                        switchOutCurve: Curves.easeInCubic,
+                        transitionBuilder: (child, a) => FadeTransition(
+                          opacity: a,
+                          child: ScaleTransition(scale: Tween(begin: 0.94, end: 1.0).animate(a), child: child),
                         ),
-                      ),
-                      const _ScanFrame(),
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 24.h,
-                        child: Text(
-                          loc.text_point_camera,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: whiteColor, fontSize: 14.sp, shadows: const [Shadow(blurRadius: 6)]),
-                        ),
+                        // Leaving QR mode removes the camera view, which also stops the camera.
+                        child: _mode == ScanMethods.qr
+                            ? KeyedSubtree(key: const ValueKey('qr'), child: _cameraView())
+                            : NfcReaderView(key: const ValueKey('nfc'), onTicket: (token) => _handle(token, ScanMethods.nfc)),
                       ),
                       AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 180),
-                        child: _showResult ? _ResultOverlay(scan: ref.watch(lastScanProvider)) : const SizedBox.shrink(),
+                        duration: const Duration(milliseconds: 220),
+                        child: _showResult && lastScan != null
+                            ? ScanResultOverlay(key: ValueKey(lastScan.id), scan: lastScan)
+                            : const SizedBox.shrink(),
                       ),
                     ],
                   ),
@@ -162,6 +188,34 @@ class ScannerScreenState extends ConsumerState<ScannerScreen> {
                 _statsBar(history),
               ],
             ),
+    );
+  }
+
+  Widget _cameraView() {
+    final loc = context.loc;
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        MobileScanner(
+          controller: _camera,
+          onDetect: _onDetect,
+          errorBuilder: (context, error) => Theme(
+            data: ThemeData.dark(),
+            child: StatusView(icon: Icons.no_photography_outlined, message: loc.text_camera_error),
+          ),
+        ),
+        const _ScanFrame(),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 24.h,
+          child: Text(
+            loc.text_point_camera,
+            textAlign: TextAlign.center,
+            style: TextStyle(color: whiteColor, fontSize: 14.sp, shadows: const [Shadow(blurRadius: 6)]),
+          ),
+        ),
+      ],
     );
   }
 
@@ -247,10 +301,21 @@ class ScannerScreenState extends ConsumerState<ScannerScreen> {
     );
   }
 
+  /// The number rolls to its new value and pops briefly when it changes.
   Widget _stat(String value, String label, Color color) => Expanded(
         child: Column(
           children: [
-            Text(value, style: TextStyle(color: color, fontSize: 22.sp, fontWeight: FontWeight.w700)),
+            TweenAnimationBuilder<double>(
+              tween: Tween(end: double.parse(value)),
+              duration: const Duration(milliseconds: 600),
+              curve: Curves.easeOutCubic,
+              builder: (_, v, _) => Text(
+                '${v.round()}',
+                style: TextStyle(color: color, fontSize: 22.sp, fontWeight: FontWeight.w700, fontFeatures: const [FontFeature.tabularFigures()]),
+              ),
+            )
+                .animate(key: ValueKey(value))
+                .scale(begin: const Offset(1.25, 1.25), end: const Offset(1, 1), duration: 350.ms, curve: Curves.easeOutBack),
             Text(label, style: TextStyle(color: darkModeTextColor, fontSize: 11.sp)),
           ],
         ),
@@ -287,6 +352,7 @@ class ScannerScreenState extends ConsumerState<ScannerScreen> {
                             [
                               Utils.formatDate(s.scannedAt, pattern: 'h:mm:ss a'),
                               look.label,
+                              ResultLook.methodLabel(loc, s.method),
                               if (s.overruled) loc.text_scanned_by_server(ResultLook.of(loc, s.serverResult!).label),
                             ].join(' · '),
                           ),
@@ -299,57 +365,6 @@ class ScannerScreenState extends ConsumerState<ScannerScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// Colour, icon and label for a scan result.
-class ResultLook {
-  const ResultLook(this.color, this.icon, this.label);
-
-  final Color color;
-  final IconData icon;
-  final String label;
-
-  static ResultLook of(AppLocalizations loc, String result) => switch (result) {
-        ScanResults.accepted => ResultLook(greenColor, Icons.check_circle_rounded, loc.text_admitted),
-        ScanResults.duplicate => ResultLook(amberColor, Icons.content_copy_rounded, loc.text_already_used),
-        ScanResults.revoked => ResultLook(redColor, Icons.block_rounded, loc.text_revoked),
-        ScanResults.wrongEvent => ResultLook(redColor, Icons.event_busy_rounded, loc.text_wrong_event),
-        _ => ResultLook(redColor, Icons.gpp_bad_rounded, loc.text_invalid_ticket),
-      };
-}
-
-class _ResultOverlay extends StatelessWidget {
-  const _ResultOverlay({required this.scan});
-
-  final QueuedScan? scan;
-
-  @override
-  Widget build(BuildContext context) {
-    if (scan == null) return const SizedBox.shrink();
-    final look = ResultLook.of(context.loc, scan!.localResult);
-    return Container(
-      key: ValueKey(scan!.id),
-      color: look.color.withValues(alpha: 0.92),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(look.icon, color: whiteColor, size: 110.sp),
-          SizedBox(height: 12.h),
-          Text(look.label, style: TextStyle(color: whiteColor, fontSize: 30.sp, fontWeight: FontWeight.w800)),
-          if (scan!.holderName?.isNotEmpty == true) ...[
-            SizedBox(height: 6.h),
-            Text(scan!.holderName!, style: TextStyle(color: whiteColor, fontSize: 20.sp, fontWeight: FontWeight.w500)),
-          ],
-          SizedBox(height: 4.h),
-          Text(
-            '#${(scan!.ticketId ?? '').split('-').first.toUpperCase()}',
-            style: TextStyle(color: whiteColor.withValues(alpha: 0.8), fontSize: 13.sp, letterSpacing: 1.5),
-          ),
-        ],
       ),
     );
   }

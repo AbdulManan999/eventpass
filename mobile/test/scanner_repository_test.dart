@@ -114,6 +114,17 @@ void main() {
     expect(await db.scansDao.pendingCount(), 3);
   });
 
+  test('records NFC taps and uploads how each ticket was read', () async {
+    adapter.respond = null;
+    final tap = await repo().scan(bundle, nodeToken, method: ScanMethods.nfc);
+    expect(tap.localResult, ScanResults.accepted);
+    expect((await repo().history(eventId)).single.method, ScanMethods.nfc);
+
+    adapter.respond = fakeServer();
+    await repo().apiSyncScans(eventId);
+    expect(adapter.requests.single.data['scans'][0]['method'], 'nfc');
+  });
+
   test('rejects tickets revoked in the bundle', () async {
     final revokedBundle = ScannerBundle.fromJson(bundleJson(revoked: [ticketId]));
     expect((await repo().scan(revokedBundle, nodeToken)).localResult, ScanResults.revoked);
@@ -132,6 +143,7 @@ void main() {
     final request = adapter.requests.single;
     expect(request.path, 'events/$eventId/scans/sync');
     expect(request.data['deviceId'], 'North gate');
+    expect(request.data['scans'][0]['method'], 'qr');
     expect(request.headers['Authorization'], 'Bearer staff-token');
     expect(await db.scansDao.pendingCount(), 0);
 
@@ -188,7 +200,8 @@ class _ScannerRepositoryHandle {
 
   final ProviderContainer _c;
 
-  Future<QueuedScan> scan(ScannerBundle b, String token) => _c.read(scannerRepository).scan(b, token);
+  Future<QueuedScan> scan(ScannerBundle b, String token, {String method = ScanMethods.qr}) =>
+      _c.read(scannerRepository).scan(b, token, method: method);
   Future<SyncSummary> apiSyncScans(String id) => _c.read(scannerRepository).apiSyncScans(id);
   Future<BundleResult> apiLoadBundle(String id) => _c.read(scannerRepository).apiLoadBundle(id);
   Future<List<QueuedScan>> history(String id) => _c.read(scannerRepository).history(id);

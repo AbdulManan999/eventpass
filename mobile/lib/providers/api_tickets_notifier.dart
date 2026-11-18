@@ -21,14 +21,17 @@ class ApiTicketsNotifier extends StateNotifier<ApiStatesModel> {
 
   final Ref _ref;
 
-  Future<void> apiGetMyTickets() async {
+  /// [silent] refreshes in the background (no spinner, network errors ignored),
+  /// e.g. while waiting for the gate to confirm an NFC check-in.
+  Future<void> apiGetMyTickets({bool silent = false}) async {
     try {
-      state = ApiStatesModel(States.LOADING, '', null);
+      if (!silent) state = ApiStatesModel(States.LOADING, '', null);
       final response = await _ref.read(ticketsRepository).apiGetMyTickets();
       _ref.read(myTicketsProvider.notifier).state = response.tickets;
       _ref.read(ticketsFromCacheProvider.notifier).state = response.fromCache;
       state = ApiStatesModel(States.DATA, '', response);
     } on DataException catch (ex) {
+      if (silent && ex.statusCode != 401) return;
       _setError(ex);
     } catch (ex) {
       state = ApiStatesModel(States.ERROR, ex.toString(), null);

@@ -7,6 +7,7 @@ class QueuedScan {
     required this.token,
     required this.scannedAt,
     required this.localResult,
+    this.method = ScanMethods.qr,
     this.ticketId,
     this.holderName,
     this.serverResult,
@@ -23,6 +24,9 @@ class QueuedScan {
 
   /// What this phone decided offline: see [ScanResults].
   final String localResult;
+
+  /// How the gate read the ticket: see [ScanMethods].
+  final String method;
   final String? ticketId;
   final String? holderName;
 
@@ -40,6 +44,16 @@ class QueuedScan {
   /// The phone let someone in, but the server later found the ticket was
   /// already used at another gate (or revoked after the bundle was downloaded).
   bool get overruled => localResult == ScanResults.accepted && serverResult != null && serverResult != ScanResults.accepted;
+}
+
+/// How a gate phone read a ticket, shared with the backend's vocabulary.
+class ScanMethods {
+  ScanMethods._();
+
+  static const qr = 'qr';
+
+  /// Tapped: an NFC wristband, sticker, or an attendee's phone acting as a tag.
+  static const nfc = 'nfc';
 }
 
 /// Scan results, shared with the backend's vocabulary.

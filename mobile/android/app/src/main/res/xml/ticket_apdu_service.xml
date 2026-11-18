@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The phone answers as an NFC Forum Type 4 Tag (NDEF Tag Application), so
+     gate scanners read it exactly like an NFC wristband. -->
+<host-apdu-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/nfc_ticket_service"
+    android:requireDeviceUnlock="false">
+    <aid-group android:category="other" android:description="@string/nfc_ticket_service">
+        <aid-filter android:name="D2760000850101" />
+    </aid-group>
+</host-apdu-service>

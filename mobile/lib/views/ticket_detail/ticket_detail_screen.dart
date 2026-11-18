@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -16,11 +17,13 @@ import 'package:eventpass/utils/location_service.dart';
 import 'package:eventpass/utils/utils.dart';
 import 'package:eventpass/widgets/category_style.dart';
 import 'package:eventpass/widgets/loading_widget.dart';
+import 'package:eventpass/widgets/nfc/nfc_check_in_actions.dart';
 import 'package:eventpass/widgets/session_expired_handler.dart';
 
 /// Full-screen ticket. The QR code needs no network: the token is already
-/// signed and the gate scanner checks the signature offline. During the event
-/// the attendee can also check in with their location (geofence).
+/// signed and the gate scanner checks the signature offline. The same token
+/// works over NFC: the phone can act as a tag, or be saved to a wristband.
+/// During the event the attendee can also check in with their location (geofence).
 class TicketDetailScreen extends ConsumerStatefulWidget {
   const TicketDetailScreen({super.key, required this.ticket});
 
@@ -32,17 +35,21 @@ class TicketDetailScreen extends ConsumerStatefulWidget {
 
 class TicketDetailScreenState extends ConsumerState<TicketDetailScreen> {
   Timer? _tick;
+  late final AppLifecycleListener _lifecycle;
 
   @override
   void initState() {
     super.initState();
     // Keeps the countdown and "self check-in open" state current.
     _tick = Timer.periodic(const Duration(seconds: 30), (_) => setState(() {}));
+    // The user may come back from Settings with NFC switched on.
+    _lifecycle = AppLifecycleListener(onResume: () => ref.invalidate(nfcCapabilitiesProvider));
   }
 
   @override
   void dispose() {
     _tick?.cancel();
+    _lifecycle.dispose();
     super.dispose();
   }
 
@@ -106,6 +113,7 @@ class TicketDetailScreenState extends ConsumerState<TicketDetailScreen> {
     final event = ticket.event!;
     final style = CategoryStyle.of(event.category);
     final canSelfCheckIn = !ticket.isRevoked && !ticket.isCheckedIn && event.isSelfCheckInOpen();
+    final canTap = !ticket.isRevoked && !ticket.isCheckedIn && !event.isEnded() && ticket.token != null;
     final upcoming = !event.isLive() && !event.isEnded();
 
     return Scaffold(
@@ -186,8 +194,15 @@ class TicketDetailScreenState extends ConsumerState<TicketDetailScreen> {
                     ),
                   ],
                 ),
-              ),
+              )
+                  .animate()
+                  .fadeIn(duration: 350.ms)
+                  .scale(begin: const Offset(0.94, 0.94), duration: 450.ms, curve: Curves.easeOutBack),
               SizedBox(height: 16.h),
+              if (canTap) ...[
+                NfcCheckInActions(ticket: ticket),
+                SizedBox(height: 14.h),
+              ],
               if (upcoming && !ticket.isRevoked)
                 _glassCard(
                   icon: Icons.hourglass_top_rounded,
@@ -240,7 +255,11 @@ class TicketDetailScreenState extends ConsumerState<TicketDetailScreen> {
             style: TextStyle(color: greenColor, fontSize: 15.sp, fontWeight: FontWeight.w700),
           ),
           Text(
-            ticket.checkInMethod == 'geofence' ? loc.text_checked_in_via_geofence : loc.text_checked_in_via_qr,
+            switch (ticket.checkInMethod) {
+              'geofence' => loc.text_checked_in_via_geofence,
+              'nfc' => loc.text_checked_in_via_nfc,
+              _ => loc.text_checked_in_via_qr,
+            },
             style: TextStyle(color: labelColor, fontSize: 12.5.sp),
           ),
         ],

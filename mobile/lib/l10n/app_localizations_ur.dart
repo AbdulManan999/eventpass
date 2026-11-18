@@ -366,4 +366,126 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get text_ready_to_scan => 'اسکین کے لیے تیار';
+
+  @override
+  String get text_scan_mode_qr => 'کیو آر کوڈ';
+
+  @override
+  String get text_scan_mode_nfc => 'این ایف سی ٹیپ';
+
+  @override
+  String get text_nfc_ready => 'ٹیپ کے لیے تیار';
+
+  @override
+  String get text_nfc_hold_hint => 'رسٹ بینڈ یا فون اس فون کی پشت سے لگائیں';
+
+  @override
+  String get text_nfc_wristbands => 'رسٹ بینڈ';
+
+  @override
+  String get text_nfc_phones => 'فون';
+
+  @override
+  String get text_nfc_cards => 'کارڈ اور اسٹیکر';
+
+  @override
+  String get text_nfc_off => 'این ایف سی بند ہے';
+
+  @override
+  String get text_nfc_off_hint =>
+      'ٹیپ سے ٹکٹ چیک کرنے کے لیے این ایف سی آن کریں۔';
+
+  @override
+  String get text_turn_on_nfc => 'این ایف سی آن کریں';
+
+  @override
+  String get text_nfc_unsupported =>
+      'اس فون میں این ایف سی نہیں ہے۔ اس کے بجائے کیو آر اسکین کریں۔';
+
+  @override
+  String get text_nfc_start_reading => 'پڑھنا شروع کریں';
+
+  @override
+  String get text_nfc_no_ticket => 'اس ٹیگ پر کوئی ایونٹ پاس ٹکٹ نہیں';
+
+  @override
+  String get text_nfc_check_in => 'این ایف سی سے چیک ان';
+
+  @override
+  String get text_tap_phone => 'اپنا فون ٹیپ کریں';
+
+  @override
+  String get text_tap_phone_hint => 'آپ کا فون ہی ٹکٹ بن جاتا ہے';
+
+  @override
+  String get text_save_to_wristband => 'رسٹ بینڈ میں محفوظ کریں';
+
+  @override
+  String get text_save_to_wristband_hint =>
+      'اسے این ایف سی بینڈ یا اسٹیکر پر لکھیں';
+
+  @override
+  String get text_tap_to_check_in => 'چیک ان کے لیے ٹیپ کریں';
+
+  @override
+  String get text_tap_waiting => 'اپنے فون کی پشت گیٹ والے فون سے لگائیں';
+
+  @override
+  String get text_tap_step_open => 'یہ اسکرین کھلی رکھیں';
+
+  @override
+  String get text_tap_step_hold => 'دونوں فون پشت سے پشت ملائیں';
+
+  @override
+  String get text_tap_step_buzz => 'وائبریشن کا انتظار کریں';
+
+  @override
+  String get text_tap_sent => 'ٹکٹ گیٹ کو بھیج دیا گیا';
+
+  @override
+  String get text_tap_waiting_confirm => 'گیٹ کی تصدیق کا انتظار…';
+
+  @override
+  String get text_tap_sent_offline =>
+      'گیٹ کو آپ کا ٹکٹ مل گیا ہے۔ سنک ہونے پر تصدیق ہو جائے گی۔';
+
+  @override
+  String get text_youre_in => 'آپ اندر ہیں!';
+
+  @override
+  String get text_tap_failed =>
+      'یہ فون این ایف سی شروع نہیں کر سکا۔ اس کے بجائے اپنا کیو آر کوڈ دکھائیں۔';
+
+  @override
+  String get text_write_waiting =>
+      'خالی این ایف سی رسٹ بینڈ یا اسٹیکر اپنے فون سے لگائیں';
+
+  @override
+  String get text_write_tag_size =>
+      'NTAG215 یا اس سے بڑے ٹیگ کے ساتھ کام کرتا ہے';
+
+  @override
+  String get text_write_success => 'محفوظ ہو گیا! گیٹ پر رسٹ بینڈ ٹیپ کریں۔';
+
+  @override
+  String get text_write_too_small =>
+      'یہ ٹیگ ٹکٹ کے لیے بہت چھوٹا ہے۔ NTAG215 یا اس سے بڑا استعمال کریں۔';
+
+  @override
+  String get text_write_read_only =>
+      'یہ ٹیگ لاک ہے اور اس پر لکھا نہیں جا سکتا۔';
+
+  @override
+  String get text_write_not_ndef =>
+      'یہ ٹیگ سپورٹڈ نہیں۔ این ایف سی اسٹیکر یا رسٹ بینڈ آزمائیں۔';
+
+  @override
+  String get text_write_failed =>
+      'ٹیگ پر نہیں لکھا جا سکا۔ اسے ساکن رکھیں اور دوبارہ کوشش کریں۔';
+
+  @override
+  String get text_checked_in_via_nfc => 'این ایف سی ٹیپ سے چیک ان ہوا';
+
+  @override
+  String get text_done => 'ہو گیا';
 }

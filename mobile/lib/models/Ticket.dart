@@ -73,7 +73,7 @@ class Ticket {
   /// ISO-8601 time of the accepted check-in, or null if not checked in.
   String? get checkedInAt => _checkedInAt;
 
-  /// `qr` (scanned at a gate) or `geofence` (self check-in).
+  /// `qr` or `nfc` (read at a gate), or `geofence` (self check-in).
   String? get checkInMethod => _checkInMethod;
 
   bool get isRevoked => _status == 'revoked';

@@ -37,7 +37,7 @@ class MyDatabase extends _$MyDatabase {
 
   /// Bump whenever a table is added/changed, and add a step in [migration].
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -49,6 +49,10 @@ class MyDatabase extends _$MyDatabase {
             await m.addColumn(ticketsTable, ticketsTable.checkInMethod);
             await m.createTable(scanQueueTable);
             await m.createTable(scannerBundlesTable);
+          }
+          if (from == 2) {
+            // v3: NFC check-in. (A v1 upgrade already created the table with this column.)
+            await m.addColumn(scanQueueTable, scanQueueTable.method);
           }
         },
       );
