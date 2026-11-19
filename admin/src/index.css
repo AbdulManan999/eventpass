@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @import 'leaflet/dist/leaflet.css';
 
+/* `dark:` follows the theme picked in the header, not only the OS setting. */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --color-brand-50: #eef2ff;
@@ -9,6 +12,63 @@
   --color-brand-600: #4f46e5;
   --color-brand-700: #4338ca;
   --color-brand-900: #312e81;
+
+  /* Cards, inputs, the header. */
+  --color-surface: #ffffff;
+  /* Brand-coloured text and icons (links, active nav, badges). */
+  --color-brand-ink: #4338ca;
+}
+
+:root {
+  /* Category colours (lib/format.ts); the badge background is a tint of the same colour. */
+  --cat-tech: #4338ca;
+  --cat-music: #be185d;
+  --cat-sports: #047857;
+  --cat-business: #b45309;
+  --cat-community: #0369a1;
+  --cat-bg-alpha: 9%;
+}
+
+/*
+ * Dark mode swaps the colour scales instead of adding `dark:` to every class
+ * (the approach Radix Colors uses): slate-50 becomes the darkest background
+ * and slate-900 the brightest text, pale tints become translucent glows and
+ * tinted text gets lighter. Components keep writing `text-slate-500` or
+ * `bg-emerald-50` and read well in both themes. Solid fills (brand-600,
+ * emerald-500) stay as they are, so white text on them keeps its contrast.
+ * The navy matches the mobile app's dark theme.
+ */
+:root[data-theme='dark'] {
+  --color-surface: #151b2e;
+  --color-brand-ink: #a5b4fc;
+
+  --color-slate-50: #0b1020;
+  --color-slate-100: #1e2640;
+  --color-slate-200: #2a3350;
+  --color-slate-300: #3a4566;
+  --color-slate-400: #8391ab;
+  --color-slate-500: #a3b0c6;
+  --color-slate-600: #cbd5e1;
+  --color-slate-700: #dbe3ee;
+  --color-slate-800: #e2e8f0;
+  --color-slate-900: #f8fafc;
+
+  --color-brand-50: color-mix(in oklab, #6366f1 22%, transparent);
+  --color-emerald-50: color-mix(in oklab, #10b981 16%, transparent);
+  --color-amber-50: color-mix(in oklab, #f59e0b 16%, transparent);
+  --color-rose-50: color-mix(in oklab, #f43f5e 16%, transparent);
+  --color-emerald-600: #34d399;
+  --color-emerald-700: #6ee7b7;
+  --color-amber-700: #fcd34d;
+  --color-rose-600: #fb7185;
+  --color-rose-700: #fda4af;
+
+  --cat-tech: #a5b4fc;
+  --cat-music: #f9a8d4;
+  --cat-sports: #6ee7b7;
+  --cat-business: #fcd34d;
+  --cat-community: #7dd3fc;
+  --cat-bg-alpha: 16%;
 }
 
 body {
@@ -16,11 +76,11 @@ body {
 }
 
 @utility card {
-  @apply rounded-2xl border border-slate-200 bg-white;
+  @apply rounded-2xl border border-slate-200 bg-surface;
 }
 
 @utility input {
-  @apply w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100;
+  @apply w-full rounded-lg border border-slate-300 bg-surface px-3 py-2 text-sm outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-100 dark:focus:ring-brand-500/30;
 }
 
 @utility btn {
@@ -28,7 +88,7 @@ body {
 }
 
 @utility btn-primary {
-  @apply btn bg-brand-700 text-white hover:bg-brand-900;
+  @apply btn bg-brand-700 text-white hover:bg-brand-900 dark:bg-brand-600 dark:hover:bg-brand-500;
 }
 
 @utility btn-ghost {
@@ -39,6 +99,37 @@ body {
   @apply mb-1 block text-sm font-medium text-slate-700;
 }
 
+/* Theme switch: the new theme is revealed in a growing circle (ThemeContext). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
 .leaflet-container {
   font-family: inherit;
+}
+
+/* Dark map: invert OpenStreetMap tiles and turn the hues back, so water stays blue. */
+[data-theme='dark'] .leaflet-container {
+  background: #0b1020;
+}
+[data-theme='dark'] .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.85) saturate(0.6);
+}
+[data-theme='dark'] .leaflet-bar a,
+[data-theme='dark'] .leaflet-tooltip {
+  background: var(--color-slate-100);
+  border-color: var(--color-slate-200);
+  color: var(--color-slate-800);
+}
+[data-theme='dark'] .leaflet-tooltip-top::before {
+  border-top-color: var(--color-slate-100);
+}
+[data-theme='dark'] .leaflet-control-attribution {
+  background: rgb(11 16 32 / 0.75);
+  color: var(--color-slate-400);
+}
+[data-theme='dark'] .leaflet-control-attribution a {
+  color: var(--color-brand-ink);
 }

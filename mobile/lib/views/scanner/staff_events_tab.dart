@@ -50,7 +50,7 @@ class StaffEventsTabState extends ConsumerState<StaffEventsTab> {
               maxLength: 40,
               decoration: InputDecoration(hintText: loc.text_gate_name_hint),
             ),
-            Text(loc.text_gate_name_help, style: TextStyle(fontSize: 12.sp, color: hintColor)),
+            Text(loc.text_gate_name_help, style: TextStyle(fontSize: 12.sp, color: context.palette.hint)),
           ],
         ),
         actions: [
@@ -111,7 +111,7 @@ class StaffEventsTabState extends ConsumerState<StaffEventsTab> {
             ),
           ),
           SizedBox(height: 18.h),
-          Text(loc.text_staff_events_hint, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: headingColor)),
+          Text(loc.text_staff_events_hint, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: context.palette.heading)),
           SizedBox(height: 10.h),
           if (events != null && events.isEmpty)
             Padding(
@@ -126,12 +126,12 @@ class StaffEventsTabState extends ConsumerState<StaffEventsTab> {
                 badges: [
                   Pill(
                     text: e.role == 'organizer' ? loc.text_role_organizer : loc.text_role_staff,
-                    color: e.role == 'organizer' ? primaryColor : secondaryColor,
+                    color: context.accent(e.role == 'organizer' ? primaryColor : secondaryColor),
                     icon: Icons.badge_outlined,
                   ),
                   if (e.isLive()) Pill(text: loc.text_live_now, color: greenColor, pulse: true),
                 ],
-                trailing: Icon(Icons.qr_code_scanner_rounded, color: primaryColor, size: 26.sp),
+                trailing: Icon(Icons.qr_code_scanner_rounded, color: context.accent(primaryColor), size: 26.sp),
                 onTap: () => Navigator.of(context).pushNamed(Routes.SCANNER, arguments: e),
               ),
             ),

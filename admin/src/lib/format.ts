@@ -68,10 +68,19 @@ export function fillTimeline(
   return points
 }
 
-export const CATEGORY_STYLE: Record<Category, { label: string; color: string; bg: string }> = {
-  tech: { label: 'Tech', color: '#4338CA', bg: '#EEF2FF' },
-  music: { label: 'Music', color: '#BE185D', bg: '#FDF2F8' },
-  sports: { label: 'Sports', color: '#047857', bg: '#ECFDF5' },
-  business: { label: 'Business', color: '#B45309', bg: '#FFFBEB' },
-  community: { label: 'Community', color: '#0369A1', bg: '#F0F9FF' },
+const category = (label: string, solid: string, key: Category) => ({
+  label,
+  /** Fills behind white text (selected chip, card stripe): the same in both themes. */
+  solid,
+  /** Text and its tinted background; lighter in dark mode (variables in index.css). */
+  color: `var(--cat-${key})`,
+  bg: `color-mix(in oklab, var(--cat-${key}) var(--cat-bg-alpha), transparent)`,
+})
+
+export const CATEGORY_STYLE: Record<Category, { label: string; solid: string; color: string; bg: string }> = {
+  tech: category('Tech', '#4338CA', 'tech'),
+  music: category('Music', '#BE185D', 'music'),
+  sports: category('Sports', '#047857', 'sports'),
+  business: category('Business', '#B45309', 'business'),
+  community: category('Community', '#0369A1', 'community'),
 }

@@ -35,7 +35,7 @@ export function EventDashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <Link to="/" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-brand-700">
+        <Link to="/" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-brand-ink">
           <ArrowLeft size={14} /> All events
         </Link>
         <div className="mt-2 flex flex-wrap items-center gap-3">
@@ -103,7 +103,7 @@ export function EventDashboardPage() {
 }
 
 const TONES = {
-  brand: 'bg-brand-50 text-brand-700',
+  brand: 'bg-brand-50 text-brand-ink',
   emerald: 'bg-emerald-50 text-emerald-700',
   amber: 'bg-amber-50 text-amber-700',
   rose: 'bg-rose-50 text-rose-700',

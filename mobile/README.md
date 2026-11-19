@@ -62,6 +62,12 @@ An NFC ticket is the same signed token as the QR code, stored as one NDEF Text r
 
 To try it you need two phones (one Android for tap-to-check-in) or one phone and an NTAG215 sticker. NFC can't be tested on an emulator.
 
+### Dark mode
+
+Profile → Settings offers **System**, **Light** and **Dark**, each shown as a small live preview of the app. The choice (and the language) is saved in SharedPreferences and restored in `main()` before the first frame, so the app never flashes the wrong theme.
+
+Screens don't use raw colour constants for surfaces and text. They read semantic tokens from `AppPalette`, a `ThemeExtension` in `utils/colors.dart` (`context.palette.surface`, `.heading`, `.border`…), so one widget works in both themes. `AppPalette.lerp` makes every colour cross-fade when the theme changes. Brand and category colours go through `context.accent()`, which lightens them on dark backgrounds. Venue maps switch to dark tiles. The gate scanner, the ticket's QR card and the tap-to-check-in screen look the same in both themes on purpose: the scanner is always dark, and a QR code scans best on white.
+
 ### Geofenced self check-in
 
 The ticket screen offers "Check in with my location" from 2 hours before the start until the end. The app takes one high-accuracy GPS fix (`geolocator`) and sends it with its accuracy and the OS's mock-location flag; the **server** computes the distance to the venue and decides. The event screen shows the venue and its radius on an OpenStreetMap map (`flutter_map`).
@@ -76,5 +82,6 @@ Flutter 3.47 · Riverpod · Dio · Drift (SQLite) · mobile_scanner · nfc_manag
 - `scanner_repository_test.dart`: scanning with no network, duplicate detection, sync with the gate name, failed uploads stay queued, overruled scans, cached bundle fallback.
 - `tickets_repository_test.dart`: online fetch, airplane mode, empty cache, 401 handling, revoked tickets, claiming, sold-out, self check-in (success, outside geofence, permission denied).
 - `ticket_ndef_test.dart`: NDEF encoding matches the bytes the phone emulates, short and long records, tokens in records written by other apps, tag size limits.
+- `settings_theme_test.dart`: picking Dark or Light in Settings re-themes the app and saves the choice; System follows the phone; palettes blend during the animation.
 - `nfc_screens_test.dart`: the gate NFC reader (tickets, tags without a ticket, NFC off), the animated result overlay, and the whole tap-to-check-in flow (emulating, sent, confirmed), driven by a fake `NfcService`.
 - `android/app/src/test/.../Type4TagEmulatorTest.kt`: a full Type 4 Tag reader conversation. Run with `cd android && ./gradlew :app:testDebugUnitTest`.

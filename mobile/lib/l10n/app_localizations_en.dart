@@ -489,4 +489,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get text_done => 'Done';
+
+  @override
+  String get text_settings => 'Settings';
+
+  @override
+  String get text_appearance => 'Appearance';
+
+  @override
+  String get text_theme_system => 'System';
+
+  @override
+  String get text_theme_light => 'Light';
+
+  @override
+  String get text_theme_dark => 'Dark';
+
+  @override
+  String get text_theme_system_hint => 'Matches your phone\'s setting';
 }

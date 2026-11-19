@@ -166,6 +166,8 @@ try {
         id: randomUUID(),
         token,
         scannedAt: new Date(startsAt.getTime() - 20 * 60_000 + i * 3.5 * 60_000 + Math.random() * 60_000).toISOString(),
+        // Every third guest tapped an NFC wristband or their phone instead of showing the QR.
+        method: i % 3 === 0 ? 'nfc' : 'qr',
       }));
       const half = Math.ceil(scans.length / 2);
       await api('POST', `/events/${eventId}/scans/sync`, staff, { deviceId: 'North gate', scans: scans.slice(0, half) });

@@ -1,6 +1,7 @@
 import type { LatLngExpression } from 'leaflet'
 import { useEffect } from 'react'
 import { Circle, CircleMarker, MapContainer, TileLayer, Tooltip, useMap, useMapEvents } from 'react-leaflet'
+import { useTheme } from '../theme/ThemeContext'
 
 export interface MapPoint {
   id: string
@@ -22,6 +23,7 @@ interface Props {
 
 /** OpenStreetMap view of a venue and its geofence circle. */
 export function VenueMap({ latitude, longitude, radiusM, points = [], onPick, className = 'h-72' }: Props) {
+  const { chart } = useTheme()
   const center: LatLngExpression = [latitude, longitude]
   return (
     <MapContainer center={center} zoom={16} scrollWheelZoom={!!onPick} className={`z-0 w-full rounded-xl ${className}`}>
@@ -31,8 +33,8 @@ export function VenueMap({ latitude, longitude, radiusM, points = [], onPick, cl
       />
       <Recenter latitude={latitude} longitude={longitude} radiusM={radiusM} />
       {onPick && <ClickToPick onPick={onPick} />}
-      <Circle center={center} radius={radiusM} pathOptions={{ color: '#4338CA', fillColor: '#6366F1', fillOpacity: 0.12, weight: 2 }} />
-      <CircleMarker center={center} radius={7} pathOptions={{ color: '#fff', fillColor: '#4338CA', fillOpacity: 1, weight: 3 }}>
+      <Circle center={center} radius={radiusM} pathOptions={{ color: chart.venue, fillColor: chart.venueFill, fillOpacity: 0.12, weight: 2 }} />
+      <CircleMarker center={center} radius={7} pathOptions={{ color: chart.markerRing, fillColor: chart.venue, fillOpacity: 1, weight: 3 }}>
         <Tooltip direction="top">Venue · geofence {radiusM} m</Tooltip>
       </CircleMarker>
       {points.map((p) => (
@@ -40,7 +42,7 @@ export function VenueMap({ latitude, longitude, radiusM, points = [], onPick, cl
           key={p.id}
           center={[p.latitude, p.longitude]}
           radius={5}
-          pathOptions={{ color: '#fff', fillColor: '#10B981', fillOpacity: 1, weight: 2 }}
+          pathOptions={{ color: chart.markerRing, fillColor: chart.methods.geofence, fillOpacity: 1, weight: 2 }}
         >
           <Tooltip>{p.label}</Tooltip>
         </CircleMarker>

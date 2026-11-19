@@ -30,7 +30,7 @@ export function StaffPanel({ eventId }: { eventId: string }) {
       <ul className="divide-y divide-slate-100">
         {staff.data?.map((m) => (
           <li key={m.userId} className="flex items-center gap-3 py-2.5">
-            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-brand-50 text-sm font-semibold text-brand-700">
+            <span className="grid size-9 shrink-0 place-items-center rounded-full bg-brand-50 text-sm font-semibold text-brand-ink">
               {m.name
                 .split(' ')
                 .map((p) => p[0])

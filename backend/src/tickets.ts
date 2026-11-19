@@ -16,7 +16,7 @@ interface TicketRow {
   issued_at: Date;
   holder_name: string;
   checked_in_at: Date | null;
-  check_in_method: 'qr' | 'geofence' | null;
+  check_in_method: 'qr' | 'nfc' | 'geofence' | null;
 }
 
 /** Self check-in opens this long before the event starts. */

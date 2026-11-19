@@ -15,6 +15,8 @@ const syncBody = z.object({
         id: z.string().uuid(),
         token: z.string().max(2000),
         scannedAt: z.coerce.date(),
+        // How the gate read the token: camera (QR) or an NFC tap. Older apps omit it.
+        method: z.enum(['qr', 'nfc']).default('qr'),
       }),
     )
     .min(1)
@@ -62,10 +64,10 @@ export async function scanRoutes(app: FastifyInstance, { db }: { db: Db }) {
       else {
         // The partial unique index allows only one accepted scan per ticket.
         const accepted = await db.query(
-          `INSERT INTO scans (id, event_id, ticket_id, scanned_by, device_id, scanned_at, result)
-           VALUES ($1, $2, $3, $4, $5, $6, 'accepted')
+          `INSERT INTO scans (id, event_id, ticket_id, scanned_by, device_id, scanned_at, result, method)
+           VALUES ($1, $2, $3, $4, $5, $6, 'accepted', $7)
            ON CONFLICT (ticket_id) WHERE result = 'accepted' DO NOTHING`,
-          [scan.id, event.id, ticket.id, request.user.sub, body.deviceId, scan.scannedAt],
+          [scan.id, event.id, ticket.id, request.user.sub, body.deviceId, scan.scannedAt, scan.method],
         );
         if (accepted.rowCount) {
           results.push({ id: scan.id, result: 'accepted', ticketId: ticket.id, holderName: claims!.name });
@@ -75,10 +77,10 @@ export async function scanRoutes(app: FastifyInstance, { db }: { db: Db }) {
       }
 
       await db.query(
-        `INSERT INTO scans (id, event_id, ticket_id, scanned_by, device_id, scanned_at, result)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)
+        `INSERT INTO scans (id, event_id, ticket_id, scanned_by, device_id, scanned_at, result, method)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
          ON CONFLICT (id) DO NOTHING`,
-        [scan.id, event.id, ticket?.id ?? null, request.user.sub, body.deviceId, scan.scannedAt, result],
+        [scan.id, event.id, ticket?.id ?? null, request.user.sub, body.deviceId, scan.scannedAt, result, scan.method],
       );
       results.push({ id: scan.id, result, ticketId: ticket?.id ?? null, holderName: claims?.name ?? null });
     }

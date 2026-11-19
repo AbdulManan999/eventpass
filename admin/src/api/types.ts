@@ -33,13 +33,13 @@ export interface Stats {
   revoked: number
   checkedIn: number
   rejectedScans: number
-  byMethod: { qr: number; geofence: number }
+  byMethod: { qr: number; nfc: number; geofence: number }
   timeline: { at: string; checkIns: number }[]
   gates: { deviceId: string; scans: number; accepted: number }[]
 }
 
 export type ScanResult = 'accepted' | 'duplicate' | 'revoked' | 'invalid'
-export type CheckInMethod = 'qr' | 'geofence'
+export type CheckInMethod = 'qr' | 'nfc' | 'geofence'
 
 export interface Scan {
   id: string

@@ -62,16 +62,16 @@ function EventCard({ event: e }: { event: EventSummary }) {
   return (
     <Link
       to={`/events/${e.id}`}
-      className="card group flex flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200"
+      className="card group flex flex-col overflow-hidden transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-slate-200 dark:hover:shadow-black/40"
     >
-      <div className="h-1.5" style={{ background: CATEGORY_STYLE[e.category].color }} />
+      <div className="h-1.5" style={{ background: CATEGORY_STYLE[e.category].solid }} />
       <div className="flex flex-1 flex-col gap-4 p-5">
         <div className="flex items-center gap-2">
           <StatusBadge status={status} />
           <CategoryBadge category={e.category} />
         </div>
         <div>
-          <h3 className="font-semibold text-slate-900 group-hover:text-brand-700">{e.title}</h3>
+          <h3 className="font-semibold text-slate-900 group-hover:text-brand-ink">{e.title}</h3>
           <p className="mt-1 flex items-center gap-1.5 text-sm text-slate-500">
             <CalendarDays size={14} /> {formatDateTime(e.startsAt)}
           </p>

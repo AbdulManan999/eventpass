@@ -38,55 +38,89 @@ TextTheme _buildTextTheme(TextTheme base, {required Color heading, required Colo
   );
 }
 
-ThemeData _buildLightTheme() {
-  final colorScheme = const ColorScheme.light().copyWith(
-    primary: primaryColor,
-    secondary: secondaryColor,
-    surface: whiteColor,
-    error: redColor,
-  );
+/// Shared component styling; only the palette differs between light and dark.
+ThemeData _build({required Brightness brightness, required ColorScheme scheme, required AppPalette p}) {
+  final dark = brightness == Brightness.dark;
   final base = ThemeData(
     useMaterial3: true,
-    brightness: Brightness.light,
-    colorScheme: colorScheme,
-    primaryColor: primaryColor,
-    scaffoldBackgroundColor: backgroundColor,
-    navigationBarTheme: const NavigationBarThemeData(backgroundColor: whiteColor, indicatorColor: primaryLightColor),
-    snackBarTheme: const SnackBarThemeData(backgroundColor: primaryColor),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: primaryColor,
-      foregroundColor: whiteColor,
-      iconTheme: IconThemeData(color: whiteColor),
-      titleTextStyle: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.w600),
+    brightness: brightness,
+    colorScheme: scheme,
+    primaryColor: scheme.primary,
+    scaffoldBackgroundColor: p.background,
+    canvasColor: p.background,
+    dividerColor: p.border,
+    extensions: [p],
+    navigationBarTheme: NavigationBarThemeData(
+      backgroundColor: p.surface,
+      indicatorColor: p.primarySoft,
+      surfaceTintColor: Colors.transparent,
+      iconTheme: WidgetStateProperty.resolveWith(
+        (s) => IconThemeData(color: s.contains(WidgetState.selected) ? p.onPrimarySoft : p.hint),
+      ),
+      labelTextStyle: WidgetStateProperty.resolveWith(
+        (s) => TextStyle(
+          fontSize: 12,
+          fontWeight: s.contains(WidgetState.selected) ? FontWeight.w600 : FontWeight.w500,
+          color: s.contains(WidgetState.selected) ? p.heading : p.hint,
+        ),
+      ),
     ),
+    snackBarTheme: SnackBarThemeData(
+      backgroundColor: dark ? nightSurfaceHighColor : primaryColor,
+      contentTextStyle: const TextStyle(color: whiteColor),
+      actionTextColor: dark ? nightOnPrimarySoftColor : whiteColor,
+    ),
+    // Light: the brand-coloured bar. Dark: a quiet surface bar.
+    appBarTheme: AppBarTheme(
+      backgroundColor: dark ? p.surface : primaryColor,
+      foregroundColor: dark ? p.heading : whiteColor,
+      surfaceTintColor: Colors.transparent,
+      iconTheme: IconThemeData(color: dark ? p.heading : whiteColor),
+      titleTextStyle: TextStyle(color: dark ? p.heading : whiteColor, fontSize: 18, fontWeight: FontWeight.w600),
+    ),
+    cardTheme: CardThemeData(color: p.surface, surfaceTintColor: Colors.transparent),
+    dialogTheme: DialogThemeData(backgroundColor: p.surface, surfaceTintColor: Colors.transparent),
+    bottomSheetTheme: BottomSheetThemeData(backgroundColor: p.surface, surfaceTintColor: Colors.transparent),
+    dividerTheme: DividerThemeData(color: p.border),
+    listTileTheme: ListTileThemeData(iconColor: p.label, textColor: p.heading),
+    chipTheme: ChipThemeData(backgroundColor: p.surface, side: BorderSide(color: p.border), labelStyle: TextStyle(color: p.body)),
+    segmentedButtonTheme: SegmentedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? p.primarySoft : p.surface),
+        foregroundColor: WidgetStateProperty.resolveWith((s) => s.contains(WidgetState.selected) ? p.onPrimarySoft : p.body),
+        side: WidgetStatePropertyAll(BorderSide(color: p.border)),
+      ),
+    ),
+    progressIndicatorTheme: ProgressIndicatorThemeData(color: scheme.primary, linearTrackColor: p.border),
+    inputDecorationTheme: InputDecorationTheme(fillColor: p.inputFill, hintStyle: TextStyle(color: p.hint)),
   );
   return base.copyWith(
-    textTheme: _buildTextTheme(base.textTheme, heading: headingColor, body: textColor),
-    primaryTextTheme: _buildTextTheme(base.primaryTextTheme, heading: headingColor, body: textColor),
+    textTheme: _buildTextTheme(base.textTheme, heading: p.heading, body: p.body),
+    primaryTextTheme: _buildTextTheme(base.primaryTextTheme, heading: p.heading, body: p.body),
   );
 }
 
-ThemeData _buildDarkTheme() {
-  final colorScheme = const ColorScheme.dark().copyWith(
-    primary: primaryColor,
-    secondary: secondaryColor,
-    surface: darkSurfaceColor,
-    error: redColor,
-  );
-  final base = ThemeData(
-    useMaterial3: true,
-    brightness: Brightness.dark,
-    colorScheme: colorScheme,
-    primaryColor: primaryColor,
-    scaffoldBackgroundColor: darkBackgroundColor,
-    snackBarTheme: const SnackBarThemeData(backgroundColor: primaryColor),
-    appBarTheme: const AppBarTheme(
-      iconTheme: IconThemeData(color: whiteColor),
-      titleTextStyle: TextStyle(color: whiteColor, fontSize: 18, fontWeight: FontWeight.w600),
-    ),
-  );
-  return base.copyWith(
-    textTheme: _buildTextTheme(base.textTheme, heading: whiteColor, body: darkModeTextColor),
-    primaryTextTheme: _buildTextTheme(base.primaryTextTheme, heading: whiteColor, body: darkModeTextColor),
-  );
-}
+ThemeData _buildLightTheme() => _build(
+      brightness: Brightness.light,
+      scheme: const ColorScheme.light().copyWith(
+        primary: primaryColor,
+        secondary: secondaryColor,
+        surface: whiteColor,
+        onSurface: headingColor,
+        error: redColor,
+      ),
+      p: AppPalette.light,
+    );
+
+ThemeData _buildDarkTheme() => _build(
+      brightness: Brightness.dark,
+      scheme: const ColorScheme.dark().copyWith(
+        primary: nightPrimaryColor,
+        onPrimary: whiteColor,
+        secondary: secondaryColor,
+        surface: nightSurfaceColor,
+        onSurface: Color(0xFFF8FAFC),
+        error: Color(0xFFF87171),
+      ),
+      p: AppPalette.dark,
+    );

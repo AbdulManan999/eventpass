@@ -967,6 +967,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Done'**
   String get text_done;
+
+  /// No description provided for @text_settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get text_settings;
+
+  /// No description provided for @text_appearance.
+  ///
+  /// In en, this message translates to:
+  /// **'Appearance'**
+  String get text_appearance;
+
+  /// No description provided for @text_theme_system.
+  ///
+  /// In en, this message translates to:
+  /// **'System'**
+  String get text_theme_system;
+
+  /// No description provided for @text_theme_light.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get text_theme_light;
+
+  /// No description provided for @text_theme_dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get text_theme_dark;
+
+  /// No description provided for @text_theme_system_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Matches your phone\'s setting'**
+  String get text_theme_system_hint;
 }
 
 class _AppLocalizationsDelegate

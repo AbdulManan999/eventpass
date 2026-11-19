@@ -10,6 +10,7 @@ import 'package:eventpass/route/routes.dart';
 import 'package:eventpass/theme.dart';
 import 'package:eventpass/utils/logger.dart';
 import 'package:eventpass/utils/strings.dart';
+import 'package:eventpass/utils/utils.dart';
 
 /// Global navigator key – lets non-widget code (e.g. session-expiry handling) navigate.
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -17,7 +18,19 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(ProviderScope(observers: [Logger()], child: const MyApp()));
+  // Restore settings before the first frame, so the app never flashes the wrong theme.
+  final themeMode = await Utils.getThemeMode();
+  final language = await Utils.getLanguage();
+  runApp(
+    ProviderScope(
+      observers: [Logger()],
+      overrides: [
+        themeModeProvider.overrideWith((ref) => themeMode),
+        localeProvider.overrideWith((ref) => language == null ? null : Locale(language)),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends ConsumerWidget {
@@ -35,7 +48,10 @@ class MyApp extends ConsumerWidget {
         navigatorKey: navigatorKey,
         theme: lightThemeData,
         darkTheme: darkThemeData,
-        themeMode: ThemeMode.light,
+        themeMode: ref.watch(themeModeProvider),
+        // Every colour (including AppPalette) cross-fades when the theme changes.
+        themeAnimationDuration: const Duration(milliseconds: 450),
+        themeAnimationCurve: Curves.easeInOut,
         locale: ref.watch(localeProvider),
         localizationsDelegates: const [
           AppLocalizations.delegate,

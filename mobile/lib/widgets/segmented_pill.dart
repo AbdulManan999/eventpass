@@ -31,6 +31,7 @@ class SegmentedPill<T> extends StatelessWidget {
         border: Border.all(color: whiteColor.withValues(alpha: 0.12)),
       ),
       child: Stack(
+        alignment: Alignment.center,
         children: [
           AnimatedAlign(
             duration: const Duration(milliseconds: 380),
@@ -67,6 +68,7 @@ class SegmentedPill<T> extends StatelessWidget {
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           AnimatedScale(
                             scale: o.value == value ? 1.15 : 1,

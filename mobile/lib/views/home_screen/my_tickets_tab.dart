@@ -91,7 +91,7 @@ class MyTicketsTabState extends ConsumerState<MyTicketsTab> {
         children: [
           Padding(
             padding: EdgeInsets.only(bottom: 10.h, top: 4.h),
-            child: Text(title, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: headingColor)),
+            child: Text(title, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: context.palette.heading)),
           ),
           for (final ticket in tickets)
             Padding(
@@ -116,7 +116,7 @@ class MyTicketsTabState extends ConsumerState<MyTicketsTab> {
           children: [
             Icon(Icons.wifi_off, color: amberColor, size: 20.sp),
             SizedBox(width: 10.w),
-            Expanded(child: Text(text, style: TextStyle(fontSize: 13.sp, color: textColor))),
+            Expanded(child: Text(text, style: TextStyle(fontSize: 13.sp, color: context.palette.body))),
           ],
         ),
       );

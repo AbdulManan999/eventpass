@@ -3,8 +3,10 @@ import type { Stats } from '../../api/types'
 import { fillTimeline } from '../../lib/format'
 import { EmptyState } from '../ui'
 import { BarChart3 } from 'lucide-react'
+import { useTheme } from '../../theme/ThemeContext'
 
 export function CheckInChart({ stats, startsAt, endsAt }: { stats: Stats; startsAt: string; endsAt: string }) {
+  const { chart } = useTheme()
   const data = fillTimeline(stats.timeline, startsAt, endsAt)
   if (data.length === 0 || stats.checkedIn === 0) {
     return (
@@ -17,28 +19,31 @@ export function CheckInChart({ stats, startsAt, endsAt }: { stats: Stats; starts
     <div className="h-72">
       <ResponsiveContainer width="100%" height="100%">
         <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: -16 }}>
-          <CartesianGrid stroke="#e2e8f0" strokeDasharray="3 3" vertical={false} />
-          <XAxis dataKey="label" tick={{ fontSize: 12, fill: '#64748b' }} tickLine={false} axisLine={false} minTickGap={24} />
-          <YAxis yAxisId="bucket" allowDecimals={false} tick={{ fontSize: 12, fill: '#64748b' }} tickLine={false} axisLine={false} />
+          <CartesianGrid stroke={chart.grid} strokeDasharray="3 3" vertical={false} />
+          <XAxis dataKey="label" tick={{ fontSize: 12, fill: chart.tick }} tickLine={false} axisLine={false} minTickGap={24} />
+          <YAxis yAxisId="bucket" allowDecimals={false} tick={{ fontSize: 12, fill: chart.tick }} tickLine={false} axisLine={false} />
           <YAxis yAxisId="total" orientation="right" allowDecimals={false} hide />
           <Tooltip
-            contentStyle={{ borderRadius: 12, border: '1px solid #e2e8f0', fontSize: 13 }}
+            contentStyle={{ borderRadius: 12, border: `1px solid ${chart.tooltipBorder}`, background: chart.tooltipBg, color: chart.tooltipText, fontSize: 13 }}
+            labelStyle={{ color: chart.tooltipText }}
+            cursor={{ fill: chart.grid, opacity: 0.5 }}
             formatter={(value, name) => [value, name === 'checkIns' ? 'In this 15 min' : 'Total checked in']}
           />
-          <Bar yAxisId="bucket" dataKey="checkIns" fill="#A5B4FC" radius={[4, 4, 0, 0]} maxBarSize={28} />
-          <Line yAxisId="total" dataKey="total" stroke="#4338CA" strokeWidth={2.5} dot={false} type="monotone" />
+          <Bar yAxisId="bucket" dataKey="checkIns" fill={chart.bar} radius={[4, 4, 0, 0]} maxBarSize={28} />
+          <Line yAxisId="total" dataKey="total" stroke={chart.line} strokeWidth={2.5} dot={false} type="monotone" />
         </ComposedChart>
       </ResponsiveContainer>
     </div>
   )
 }
 
-const METHOD_COLORS = { qr: '#4338CA', geofence: '#10B981' }
-
 export function MethodDonut({ byMethod }: { byMethod: Stats['byMethod'] }) {
-  const total = byMethod.qr + byMethod.geofence
+  const { chart } = useTheme()
+  const METHOD_COLORS = chart.methods
+  const total = byMethod.qr + byMethod.nfc + byMethod.geofence
   const data = [
     { key: 'qr' as const, name: 'QR at the gate', value: byMethod.qr },
+    { key: 'nfc' as const, name: 'NFC tap at the gate', value: byMethod.nfc },
     { key: 'geofence' as const, name: 'Geofenced self check-in', value: byMethod.geofence },
   ]
   return (
@@ -48,7 +53,7 @@ export function MethodDonut({ byMethod }: { byMethod: Stats['byMethod'] }) {
           <PieChart>
             <Pie data={total ? data : [{ key: 'none', value: 1 }]} dataKey="value" innerRadius={42} outerRadius={60} paddingAngle={total ? 2 : 0} stroke="none">
               {(total ? data : [{ key: 'none' }]).map((d) => (
-                <Cell key={d.key} fill={d.key === 'none' ? '#e2e8f0' : METHOD_COLORS[d.key as 'qr' | 'geofence']} />
+                <Cell key={d.key} fill={d.key === 'none' ? chart.empty : METHOD_COLORS[d.key as keyof typeof METHOD_COLORS]} />
               ))}
             </Pie>
           </PieChart>

@@ -1,4 +1,4 @@
-import { CheckCircle2, Copy, MapPin, ScanLine, ShieldX, XCircle } from 'lucide-react'
+import { CheckCircle2, Copy, MapPin, Nfc, ScanLine, ShieldX, XCircle } from 'lucide-react'
 import type { Scan, ScanResult } from '../../api/types'
 import { formatDistance, formatTime, timeAgo } from '../../lib/format'
 import { EmptyState, Spinner } from '../ui'
@@ -29,14 +29,14 @@ export function ScanFeed({ scans }: { scans: Scan[] | undefined }) {
         return (
           <li key={s.id} className="flex items-center gap-3 py-2.5">
             <span className={`grid size-9 shrink-0 place-items-center rounded-full ${r.className}`}>
-              {s.method === 'geofence' ? <MapPin size={16} /> : <Icon size={16} />}
+              {s.method === 'geofence' ? <MapPin size={16} /> : s.method === 'nfc' ? <Nfc size={16} /> : <Icon size={16} />}
             </span>
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium text-slate-900">{s.holderName ?? 'Unknown ticket'}</p>
               <p className="truncate text-xs text-slate-500">
                 {s.method === 'geofence'
                   ? `Self check-in${s.distanceM != null ? ` · ${formatDistance(s.distanceM)} from venue` : ''}`
-                  : `${s.deviceId} · ${s.scannedBy}`}
+                  : `${s.deviceId} · ${s.method === 'nfc' ? 'NFC tap · ' : ''}${s.scannedBy}`}
                 {delayMin >= 2 && ` · synced ${delayMin} min after scan (offline)`}
               </p>
             </div>

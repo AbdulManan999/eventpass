@@ -488,4 +488,22 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get text_done => 'ہو گیا';
+
+  @override
+  String get text_settings => 'ترتیبات';
+
+  @override
+  String get text_appearance => 'ظاہری شکل';
+
+  @override
+  String get text_theme_system => 'سسٹم';
+
+  @override
+  String get text_theme_light => 'لائٹ';
+
+  @override
+  String get text_theme_dark => 'ڈارک';
+
+  @override
+  String get text_theme_system_hint => 'آپ کے فون کی ترتیب کے مطابق';
 }

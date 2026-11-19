@@ -7,7 +7,7 @@ export function Spinner({ className = '' }: { className?: string }) {
     <div
       role="status"
       aria-label="Loading"
-      className={`size-6 animate-spin rounded-full border-2 border-brand-100 border-t-brand-700 ${className}`}
+      className={`size-6 animate-spin rounded-full border-2 border-brand-100 border-t-brand-700 dark:border-slate-200 dark:border-t-brand-500 ${className}`}
     />
   )
 }
@@ -24,7 +24,7 @@ export function StatusBadge({ status }: { status: EventStatus }) {
       </span>
     )
   }
-  const style = status === 'upcoming' ? 'bg-brand-50 text-brand-700' : 'bg-slate-100 text-slate-500'
+  const style = status === 'upcoming' ? 'bg-brand-50 text-brand-ink' : 'bg-slate-100 text-slate-500'
   return (
     <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${style}`}>
       {status === 'upcoming' ? 'Upcoming' : 'Ended'}

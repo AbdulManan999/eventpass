@@ -124,7 +124,7 @@ describe.skipIf(!databaseUrl)('EventPass API', () => {
       revoked: 0,
       checkedIn: 1,
       rejectedScans: 2,
-      byMethod: { qr: 1, geofence: 0 },
+      byMethod: { qr: 1, nfc: 0, geofence: 0 },
       gates: [{ deviceId: 'gate-1', scans: 3, accepted: 1 }],
     });
     expect(stats.body.timeline).toEqual([{ at: expect.any(String), checkIns: 1 }]);
@@ -251,22 +251,35 @@ describe.skipIf(!databaseUrl)('EventPass API', () => {
     await call('POST', `/events/${eventId}/staff`, organizer, { email: 'kamran@example.com' });
     await call('POST', `/events/${eventId}/scans/sync`, staff, {
       deviceId: 'north-gate',
-      scans: [{ id: randomUUID(), token: tickets[0].token, scannedAt: new Date().toISOString() }],
+      scans: [
+        { id: randomUUID(), token: tickets[0].token, scannedAt: new Date().toISOString() },
+        // Fahad taps an NFC wristband instead of showing the QR code.
+        { id: randomUUID(), token: tickets[1].token, scannedAt: new Date().toISOString(), method: 'nfc' },
+      ],
     });
 
     const list = await call('GET', `/events/${eventId}/tickets?q=ayesha`, organizer);
     expect(list.body).toEqual([
       expect.objectContaining({ holder: { name: 'Ayesha', email: 'ayesha@example.com' }, checkInMethod: 'qr' }),
     ]);
+    const fahad = await call('GET', `/events/${eventId}/tickets?q=fahad`, organizer);
+    expect(fahad.body[0]).toMatchObject({ checkInMethod: 'nfc' });
     const feed = await call('GET', `/events/${eventId}/scans`, organizer);
-    expect(feed.body[0]).toMatchObject({ result: 'accepted', scannedBy: 'Kamran', holderName: 'Ayesha', deviceId: 'north-gate' });
+    expect(feed.body).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ result: 'accepted', method: 'qr', scannedBy: 'Kamran', holderName: 'Ayesha', deviceId: 'north-gate' }),
+        expect.objectContaining({ result: 'accepted', method: 'nfc', holderName: 'Fahad' }),
+      ]),
+    );
+    const stats = await call('GET', `/events/${eventId}/stats`, organizer);
+    expect(stats.body.byMethod).toEqual({ qr: 1, nfc: 1, geofence: 0 });
 
     const staffList = await call('GET', `/events/${eventId}/staff`, organizer);
-    expect(staffList.body).toEqual([expect.objectContaining({ name: 'Kamran', scans: 1 })]);
+    expect(staffList.body).toEqual([expect.objectContaining({ name: 'Kamran', scans: 2 })]);
     expect((await call('GET', '/me/staff-events', staff)).body).toEqual([expect.objectContaining({ id: eventId, role: 'staff' })]);
 
     const mine = await call('GET', '/organizer/events', organizer);
-    expect(mine.body).toEqual([expect.objectContaining({ id: eventId, ticketsIssued: 2, checkedIn: 1 })]);
+    expect(mine.body).toEqual([expect.objectContaining({ id: eventId, ticketsIssued: 2, checkedIn: 2 })]);
 
     // Another organizer can't read this event's data.
     expect((await call('GET', `/events/${eventId}/tickets`, otherOrganizer)).status).toBe(403);

@@ -19,7 +19,7 @@ class StatusView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 56.sp, color: hintColor),
+            Icon(icon, size: 56.sp, color: context.palette.hint),
             SizedBox(height: 16.h),
             Text(message, textAlign: TextAlign.center, style: Theme.of(context).textTheme.bodyLarge),
             if (actionText != null) ...[

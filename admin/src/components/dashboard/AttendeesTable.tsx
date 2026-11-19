@@ -51,7 +51,7 @@ export function AttendeesTable({ eventId }: { eventId: string }) {
               type="button"
               onClick={() => setFilter(f.key)}
               className={`rounded-md px-2.5 py-1 text-xs font-medium transition ${
-                filter === f.key ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                filter === f.key ? 'bg-surface text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
               }`}
             >
               {f.label}
@@ -120,7 +120,7 @@ function AttendeeStatus({ ticket: t }: { ticket: AttendeeTicket }) {
   if (t.checkedInAt) {
     return (
       <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-semibold text-emerald-700">
-        In · {formatTime(t.checkedInAt)} · {t.checkInMethod === 'geofence' ? 'Geofence' : 'QR'}
+        In · {formatTime(t.checkedInAt)} · {t.checkInMethod === 'geofence' ? 'Geofence' : t.checkInMethod === 'nfc' ? 'NFC' : 'QR'}
       </span>
     )
   }

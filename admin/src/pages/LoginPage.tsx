@@ -2,6 +2,7 @@ import { MapPin, QrCode, Ticket, WifiOff } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { useAuth } from '../auth/AuthContext'
 import { ErrorNote } from '../components/ui'
+import { ThemeToggle } from '../theme/ThemeToggle'
 
 export function LoginPage() {
   const { login } = useAuth()
@@ -51,7 +52,10 @@ export function LoginPage() {
         <p className="text-sm text-brand-100/80">Organizer dashboard</p>
       </div>
 
-      <div className="flex items-center justify-center p-6">
+      <div className="relative flex items-center justify-center p-6">
+        <div className="absolute right-4 top-4">
+          <ThemeToggle />
+        </div>
         <form onSubmit={submit} className="w-full max-w-sm space-y-5">
           <div>
             <h2 className="text-2xl font-bold text-slate-900">Sign in</h2>

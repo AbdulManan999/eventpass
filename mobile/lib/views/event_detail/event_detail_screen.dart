@@ -131,7 +131,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                             Expanded(
                               child: Text(
                                 loc.text_tickets_claimed(issued, capacity),
-                                style: TextStyle(fontSize: 13.sp, color: labelColor),
+                                style: TextStyle(fontSize: 13.sp, color: context.palette.label),
                               ),
                             ),
                             soldOut
@@ -145,7 +145,7 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                           child: LinearProgressIndicator(
                             value: issued / capacity,
                             minHeight: 8.h,
-                            backgroundColor: greyColor,
+                            backgroundColor: context.palette.border,
                             color: soldOut ? redColor : style.color,
                           ),
                         ),
@@ -155,9 +155,9 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                 ],
                 if (event.description.isNotEmpty) ...[
                   SizedBox(height: 20.h),
-                  Text(loc.text_about_event, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: headingColor)),
+                  Text(loc.text_about_event, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: context.palette.heading)),
                   SizedBox(height: 6.h),
-                  Text(event.description, style: TextStyle(fontSize: 14.sp, color: textColor, height: 1.5)),
+                  Text(event.description, style: TextStyle(fontSize: 14.sp, color: context.palette.body, height: 1.5)),
                 ],
                 if (event.venue != null) ...[
                   SizedBox(height: 20.h),
@@ -165,12 +165,12 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
                   SizedBox(height: 8.h),
                   Row(
                     children: [
-                      Icon(Icons.my_location, size: 16.sp, color: primaryColor),
+                      Icon(Icons.my_location, size: 16.sp, color: context.accent(primaryColor)),
                       SizedBox(width: 6.w),
                       Expanded(
                         child: Text(
                           loc.text_self_checkin_zone(formatDistance(event.venue!.geofenceRadiusM ?? 200)),
-                          style: TextStyle(fontSize: 12.5.sp, color: labelColor),
+                          style: TextStyle(fontSize: 12.5.sp, color: context.palette.label),
                         ),
                       ),
                     ],
@@ -204,9 +204,9 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
   Widget _card({required Widget child}) => Container(
         padding: EdgeInsets.all(14.w),
         decoration: BoxDecoration(
-          color: whiteColor,
+          color: context.palette.surface,
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: greyColor),
+          border: Border.all(color: context.palette.border),
         ),
         child: child,
       );
@@ -216,17 +216,17 @@ class EventDetailScreenState extends ConsumerState<EventDetailScreen> {
           children: [
             Container(
               padding: EdgeInsets.all(10.w),
-              decoration: BoxDecoration(color: primaryLightColor, borderRadius: BorderRadius.circular(12.r)),
-              child: Icon(icon, color: primaryColor, size: 22.sp),
+              decoration: BoxDecoration(color: context.palette.primarySoft, borderRadius: BorderRadius.circular(12.r)),
+              child: Icon(icon, color: context.palette.onPrimarySoft, size: 22.sp),
             ),
             SizedBox(width: 12.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(label, style: TextStyle(fontSize: 12.sp, color: hintColor)),
+                  Text(label, style: TextStyle(fontSize: 12.sp, color: context.palette.hint)),
                   SizedBox(height: 2.h),
-                  Text(value, style: TextStyle(fontSize: 14.sp, color: headingColor, fontWeight: FontWeight.w500, height: 1.35)),
+                  Text(value, style: TextStyle(fontSize: 14.sp, color: context.palette.heading, fontWeight: FontWeight.w500, height: 1.35)),
                 ],
               ),
             ),

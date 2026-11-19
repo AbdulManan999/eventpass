@@ -34,7 +34,7 @@ class EventCard extends StatelessWidget {
     final shownBadges = badges ?? defaultBadges;
 
     return Material(
-      color: whiteColor,
+      color: context.palette.surface,
       borderRadius: BorderRadius.circular(18.r),
       child: InkWell(
         borderRadius: BorderRadius.circular(18.r),
@@ -43,7 +43,7 @@ class EventCard extends StatelessWidget {
           padding: EdgeInsets.all(12.w),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18.r),
-            border: Border.all(color: greyColor),
+            border: Border.all(color: context.palette.border),
           ),
           child: Row(
             children: [
@@ -83,18 +83,18 @@ class EventCard extends StatelessWidget {
                   children: [
                     Text(
                       CategoryStyle.label(loc, event.category).toUpperCase(),
-                      style: TextStyle(color: style.color, fontSize: 10.sp, fontWeight: FontWeight.w700, letterSpacing: 0.8),
+                      style: TextStyle(color: context.accent(style.color), fontSize: 10.sp, fontWeight: FontWeight.w700, letterSpacing: 0.8),
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       event.title ?? '',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600, color: headingColor, height: 1.25),
+                      style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600, color: context.palette.heading, height: 1.25),
                     ),
                     SizedBox(height: 4.h),
-                    _iconLine(Icons.schedule_rounded, Utils.formatDate(event.startsAt, pattern: 'EEE, h:mm a')),
-                    _iconLine(Icons.place_outlined, event.venue?.name ?? ''),
+                    _iconLine(context, Icons.schedule_rounded, Utils.formatDate(event.startsAt, pattern: 'EEE, h:mm a')),
+                    _iconLine(context, Icons.place_outlined, event.venue?.name ?? ''),
                     if (shownBadges.isNotEmpty) ...[
                       SizedBox(height: 6.h),
                       Wrap(spacing: 6.w, runSpacing: 4.h, children: shownBadges),
@@ -110,14 +110,14 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  Widget _iconLine(IconData icon, String text) => Padding(
+  Widget _iconLine(BuildContext context, IconData icon, String text) => Padding(
         padding: EdgeInsets.only(top: 2.h),
         child: Row(
           children: [
-            Icon(icon, size: 13.sp, color: hintColor),
+            Icon(icon, size: 13.sp, color: context.palette.hint),
             SizedBox(width: 4.w),
             Expanded(
-              child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5.sp, color: labelColor)),
+              child: Text(text, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.5.sp, color: context.palette.label)),
             ),
           ],
         ),

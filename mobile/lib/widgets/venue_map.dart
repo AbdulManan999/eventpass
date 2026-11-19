@@ -33,6 +33,8 @@ class VenueMap extends StatelessWidget {
             TileLayer(
               urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
               userAgentPackageName: 'com.abdulmanan.eventpass',
+              // Dark mode: invert the light OpenStreetMap tiles instead of glaring white.
+              tileBuilder: context.isDark ? darkModeTileBuilder : null,
             ),
             CircleLayer(
               circles: [

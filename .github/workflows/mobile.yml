@@ -24,3 +24,12 @@ jobs:
       - run: dart run build_runner build --delete-conflicting-outputs
       - run: flutter analyze
       - run: flutter test
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      # Also generates the Gradle wrapper, which is git-ignored.
+      - run: flutter build apk --debug
+      - name: Android unit tests (NFC tag emulator)
+        working-directory: mobile/android
+        run: ./gradlew :app:testDebugUnitTest --console=plain

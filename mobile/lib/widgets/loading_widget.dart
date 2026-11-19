@@ -69,7 +69,7 @@ class LoadingWidgetState extends ConsumerState<LoadingWidget> with TickerProvide
                     width: 160.w,
                     padding: EdgeInsets.symmetric(vertical: 28.h, horizontal: 20.w),
                     decoration: BoxDecoration(
-                      color: whiteColor,
+                      color: context.palette.surface,
                       borderRadius: BorderRadius.circular(20.r),
                       boxShadow: [
                         BoxShadow(
@@ -87,7 +87,7 @@ class LoadingWidgetState extends ConsumerState<LoadingWidget> with TickerProvide
                         Text(
                           loadingText,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500, color: labelColor),
+                          style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500, color: context.palette.label),
                         ),
                       ],
                     ),

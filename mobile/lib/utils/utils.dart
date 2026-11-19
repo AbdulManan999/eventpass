@@ -39,6 +39,29 @@ class Utils {
     return (name == null || name.isEmpty) ? Constants.defaultGateName : name;
   }
 
+  // ── Appearance and language (device settings, survive logout) ─────────
+  static Future<void> setThemeMode(ThemeMode mode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(Constants.prefThemeMode, mode.name);
+  }
+
+  static Future<ThemeMode> getThemeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    final saved = prefs.getString(Constants.prefThemeMode);
+    return ThemeMode.values.firstWhere((m) => m.name == saved, orElse: () => ThemeMode.system);
+  }
+
+  /// Null follows the device language.
+  static Future<void> setLanguage(String? code) async {
+    final prefs = await SharedPreferences.getInstance();
+    code == null ? await prefs.remove(Constants.prefLanguage) : await prefs.setString(Constants.prefLanguage, code);
+  }
+
+  static Future<String?> getLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(Constants.prefLanguage);
+  }
+
   // ── Logged-in flag ──────────────────────────────────────────────────────
   static Future<void> setIsLoggedIn(bool value) async {
     final prefs = await SharedPreferences.getInstance();

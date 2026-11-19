@@ -87,12 +87,10 @@ export function NewEventPage() {
                   key={c}
                   type="button"
                   onClick={() => set('category', c)}
-                  className="rounded-full border px-3 py-1 text-sm font-medium transition"
-                  style={
-                    form.category === c
-                      ? { background: CATEGORY_STYLE[c].color, borderColor: CATEGORY_STYLE[c].color, color: '#fff' }
-                      : { borderColor: '#cbd5e1', color: '#475569' }
-                  }
+                  className={`rounded-full border px-3 py-1 text-sm font-medium transition ${
+                    form.category === c ? 'text-white' : 'border-slate-300 text-slate-600 hover:bg-slate-100'
+                  }`}
+                  style={form.category === c ? { background: CATEGORY_STYLE[c].solid, borderColor: CATEGORY_STYLE[c].solid } : undefined}
                 >
                   {CATEGORY_STYLE[c].label}
                 </button>
@@ -141,7 +139,7 @@ export function NewEventPage() {
           <div>
             <div className="mb-1 flex justify-between">
               <label className="label" htmlFor="radius">Self check-in radius</label>
-              <span className="text-sm font-semibold text-brand-700">{formatDistance(form.geofenceRadiusM)}</span>
+              <span className="text-sm font-semibold text-brand-ink">{formatDistance(form.geofenceRadiusM)}</span>
             </div>
             <input
               id="radius"
@@ -151,7 +149,7 @@ export function NewEventPage() {
               step={25}
               value={form.geofenceRadiusM}
               onChange={(e) => set('geofenceRadiusM', Number(e.target.value))}
-              className="w-full accent-brand-700"
+              className="w-full accent-brand-700 dark:accent-brand-500"
             />
             <p className="mt-1 text-xs text-slate-500">
               Attendees inside this circle can check themselves in from their phone, from 2 hours before the start.

@@ -80,7 +80,7 @@ class EventsTabState extends ConsumerState<EventsTab> {
                 children: [
                   Text(
                     loc.text_hello_user((user?.name ?? '').split(' ').first),
-                    style: TextStyle(fontSize: 14.sp, color: hintColor),
+                    style: TextStyle(fontSize: 14.sp, color: context.palette.hint),
                   ),
                   Text(loc.text_discover, style: Theme.of(context).textTheme.headlineSmall),
                   SizedBox(height: 14.h),
@@ -91,11 +91,11 @@ class EventsTabState extends ConsumerState<EventsTab> {
                       hintText: loc.text_search_events,
                       prefixIcon: const Icon(Icons.search),
                       filled: true,
-                      fillColor: whiteColor,
+                      fillColor: context.palette.surface,
                       contentPadding: EdgeInsets.symmetric(vertical: 12.h),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14.r), borderSide: const BorderSide(color: greyColor)),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(14.r), borderSide: BorderSide(color: context.palette.border)),
                       enabledBorder:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(14.r), borderSide: const BorderSide(color: greyColor)),
+                          OutlineInputBorder(borderRadius: BorderRadius.circular(14.r), borderSide: BorderSide(color: context.palette.border)),
                     ),
                   ),
                   SizedBox(height: 12.h),
@@ -147,7 +147,7 @@ class EventsTabState extends ConsumerState<EventsTab> {
   Widget _sectionTitle(String text) => SliverToBoxAdapter(
         child: Padding(
           padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 8.h),
-          child: Text(text, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: headingColor)),
+          child: Text(text, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: context.palette.heading)),
         ),
       );
 
@@ -168,10 +168,10 @@ class EventsTabState extends ConsumerState<EventsTab> {
                 selected: selected == c,
                 showCheckmark: false,
                 selectedColor: primaryColor,
-                labelStyle: TextStyle(color: selected == c ? whiteColor : textColor, fontWeight: FontWeight.w500),
+                labelStyle: TextStyle(color: selected == c ? whiteColor : context.palette.body, fontWeight: FontWeight.w500),
                 iconTheme: IconThemeData(color: selected == c ? whiteColor : CategoryStyle.of(c).color),
-                backgroundColor: whiteColor,
-                side: BorderSide(color: selected == c ? primaryColor : greyColor),
+                backgroundColor: context.palette.surface,
+                side: BorderSide(color: selected == c ? primaryColor : context.palette.border),
                 onSelected: (_) => ref.read(eventCategoryProvider.notifier).state = c,
               ),
             ),

@@ -231,5 +231,11 @@
   "text_write_not_ndef": "This tag isn't supported. Try an NFC sticker or wristband.",
   "text_write_failed": "Couldn't write the tag. Hold it still and try again.",
   "text_checked_in_via_nfc": "Checked in with an NFC tap",
-  "text_done": "Done"
+  "text_done": "Done",
+  "text_settings": "Settings",
+  "text_appearance": "Appearance",
+  "text_theme_system": "System",
+  "text_theme_light": "Light",
+  "text_theme_dark": "Dark",
+  "text_theme_system_hint": "Matches your phone's setting"
 }

@@ -59,7 +59,7 @@ class CustomizableTextField extends StatelessWidget {
           Text.rich(
             TextSpan(
               text: title,
-              style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500, color: labelColor),
+              style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500, color: context.palette.label),
               children: [if (isRequired) const TextSpan(text: ' *', style: TextStyle(color: redColor))],
             ),
           ),
@@ -77,18 +77,18 @@ class CustomizableTextField extends StatelessWidget {
           inputFormatters: inputFormatters,
           maxLines: hideText ? 1 : maxLines,
           onFieldSubmitted: onFieldSubmit,
-          style: TextStyle(fontSize: 14.sp, color: headingColor),
+          style: TextStyle(fontSize: 14.sp, color: context.palette.heading),
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: TextStyle(fontSize: 14.sp, color: hintColor),
+            hintStyle: TextStyle(fontSize: 14.sp, color: context.palette.hint),
             filled: true,
-            fillColor: textFieldFillColor,
+            fillColor: context.palette.inputFill,
             contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-            prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: hintColor) : null,
+            prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: context.palette.hint) : null,
             suffixIcon: suffixIcon != null
-                ? IconButton(icon: Icon(suffixIcon, color: hintColor), onPressed: onSuffixIconPressed)
+                ? IconButton(icon: Icon(suffixIcon, color: context.palette.hint), onPressed: onSuffixIconPressed)
                 : null,
-            enabledBorder: _border(textFieldBorderColor),
+            enabledBorder: _border(context.palette.inputBorder),
             focusedBorder: _border(primaryColor),
             errorBorder: _border(redColor),
             focusedErrorBorder: _border(redColor),

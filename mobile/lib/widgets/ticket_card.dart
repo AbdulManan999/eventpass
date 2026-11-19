@@ -30,7 +30,7 @@ class TicketCard extends StatelessWidget {
     } else if (event.isLive()) {
       status = Pill(text: loc.text_live_now, color: greenColor, pulse: true);
     } else if (ended) {
-      status = Pill(text: loc.text_ended, color: hintColor);
+      status = Pill(text: loc.text_ended, color: context.palette.hint);
     } else {
       final starts = event.startsAtDate!;
       status = Pill(
@@ -48,7 +48,7 @@ class TicketCard extends StatelessWidget {
           clipper: _TicketClipper(notchX: 0.72, radius: 10.r),
           child: Container(
             height: 118.h,
-            decoration: BoxDecoration(color: whiteColor, border: Border.all(color: greyColor)),
+            decoration: BoxDecoration(color: context.palette.surface, border: Border.all(color: context.palette.border)),
             child: Row(
               children: [
                 Container(width: 6.w, decoration: BoxDecoration(gradient: style.linearGradient)),
@@ -63,18 +63,18 @@ class TicketCard extends StatelessWidget {
                           event.title ?? '',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600, color: headingColor, height: 1.2),
+                          style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w600, color: context.palette.heading, height: 1.2),
                         ),
                         SizedBox(height: 4.h),
                         Text(
                           Utils.formatDate(event.startsAt, pattern: 'EEE d MMM · h:mm a'),
-                          style: TextStyle(fontSize: 12.sp, color: labelColor),
+                          style: TextStyle(fontSize: 12.sp, color: context.palette.label),
                         ),
                         Text(
                           event.venue?.name ?? '',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 12.sp, color: hintColor),
+                          style: TextStyle(fontSize: 12.sp, color: context.palette.hint),
                         ),
                         const Spacer(),
                         status,
@@ -91,12 +91,12 @@ class TicketCard extends StatelessWidget {
                       Icon(
                         ticket.isRevoked ? Icons.block : (ticket.isCheckedIn ? Icons.verified : Icons.qr_code_2_rounded),
                         size: 40.sp,
-                        color: ticket.isRevoked ? redColor : (ticket.isCheckedIn ? greenColor : style.color),
+                        color: context.accent(ticket.isRevoked ? redColor : (ticket.isCheckedIn ? greenColor : style.color)),
                       ),
                       SizedBox(height: 4.h),
                       Text(
                         '#${(ticket.id ?? '').split('-').first.toUpperCase()}',
-                        style: TextStyle(fontSize: 10.sp, color: hintColor, letterSpacing: 1),
+                        style: TextStyle(fontSize: 10.sp, color: context.palette.hint, letterSpacing: 1),
                       ),
                     ],
                   ),
@@ -140,7 +140,7 @@ class _DashedDivider extends StatelessWidget {
           final count = (c.maxHeight / 8).floor();
           return Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: List.generate(count, (_) => Container(width: 1.2, height: 4, color: greyColor)),
+            children: List.generate(count, (_) => Container(width: 1.2, height: 4, color: context.palette.border)),
           );
         },
       );

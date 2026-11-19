@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:eventpass/utils/colors.dart';
 
 /// Small rounded label: "Live now", "Checked in", "12 spots left"…
 class Pill extends StatelessWidget {
@@ -17,11 +18,11 @@ class Pill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = filled ? Colors.white : color;
+    final fg = filled ? Colors.white : context.accent(color);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 3.h),
       decoration: BoxDecoration(
-        color: filled ? color : color.withValues(alpha: 0.1),
+        color: filled ? color : color.withValues(alpha: context.isDark ? 0.22 : 0.1),
         borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(

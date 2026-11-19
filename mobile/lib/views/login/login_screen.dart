@@ -80,7 +80,7 @@ class LoginScreenState extends ConsumerState<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 32.h),
-                Icon(Icons.confirmation_number_outlined, color: primaryColor, size: 48.sp),
+                Icon(Icons.confirmation_number_outlined, color: context.accent(primaryColor), size: 48.sp),
                 SizedBox(height: 16.h),
                 Text(loc.text_welcome_back, style: Theme.of(context).textTheme.headlineMedium),
                 SizedBox(height: 8.h),

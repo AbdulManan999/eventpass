@@ -26,6 +26,10 @@ class Constants {
   static const String prefUserData = 'user_data';
   static const String prefGateName = 'gate_name';
 
+  /// Device settings: kept across logins.
+  static const String prefThemeMode = 'theme_mode';
+  static const String prefLanguage = 'language';
+
   /// Sent as the scanner's device id; shown per gate on the admin dashboard.
   static const String defaultGateName = 'Main gate';
 }

@@ -2,20 +2,21 @@ import { CalendarDays, LogOut, Plus, Ticket } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { Link, NavLink } from 'react-router'
 import { useAuth } from '../auth/AuthContext'
+import { ThemeToggle } from '../theme/ThemeToggle'
 
 export function Layout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth()
   const navClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition ${
-      isActive ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:bg-slate-100'
+      isActive ? 'bg-brand-50 text-brand-ink' : 'text-slate-600 hover:bg-slate-100'
     }`
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-[1000] border-b border-slate-200 bg-white/90 backdrop-blur">
+      <header className="sticky top-0 z-[1000] border-b border-slate-200 bg-surface/85 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center gap-4 px-4 sm:px-6">
           <Link to="/" className="flex items-center gap-2 font-semibold text-slate-900">
-            <span className="grid size-8 place-items-center rounded-lg bg-brand-700 text-white">
+            <span className="grid size-8 place-items-center rounded-lg bg-brand-700 text-white dark:bg-brand-600">
               <Ticket size={18} />
             </span>
             <span className="hidden sm:inline">EventPass</span>
@@ -30,6 +31,7 @@ export function Layout({ children }: { children: ReactNode }) {
             </NavLink>
           </nav>
           <div className="ml-auto flex items-center gap-3">
+            <ThemeToggle />
             <div className="hidden text-right md:block">
               <p className="text-sm font-medium text-slate-900">{user?.name}</p>
               <p className="text-xs text-slate-500">{user?.email}</p>

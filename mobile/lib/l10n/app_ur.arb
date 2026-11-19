@@ -144,5 +144,11 @@
   "text_write_not_ndef": "یہ ٹیگ سپورٹڈ نہیں۔ این ایف سی اسٹیکر یا رسٹ بینڈ آزمائیں۔",
   "text_write_failed": "ٹیگ پر نہیں لکھا جا سکا۔ اسے ساکن رکھیں اور دوبارہ کوشش کریں۔",
   "text_checked_in_via_nfc": "این ایف سی ٹیپ سے چیک ان ہوا",
-  "text_done": "ہو گیا"
+  "text_done": "ہو گیا",
+  "text_settings": "ترتیبات",
+  "text_appearance": "ظاہری شکل",
+  "text_theme_system": "سسٹم",
+  "text_theme_light": "لائٹ",
+  "text_theme_dark": "ڈارک",
+  "text_theme_system_hint": "آپ کے فون کی ترتیب کے مطابق"
 }

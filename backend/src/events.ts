@@ -217,12 +217,13 @@ export async function eventRoutes(app: FastifyInstance, { db, keyEncryptionKey }
     const event = await loadEvent(db, request.params.id);
     assertOrganizer(event, request.user);
     const [totals, timeline, devices] = await Promise.all([
-      db.query<{ revoked: number; checked_in: number; rejected: number; qr: number; geofence: number }>(
+      db.query<{ revoked: number; checked_in: number; rejected: number; qr: number; nfc: number; geofence: number }>(
         `SELECT
            count(*) FILTER (WHERE t.status = 'revoked')::int AS revoked,
            (SELECT count(*)::int FROM scans WHERE event_id = $1 AND result = 'accepted')                       AS checked_in,
            (SELECT count(*)::int FROM scans WHERE event_id = $1 AND result <> 'accepted')                      AS rejected,
            (SELECT count(*)::int FROM scans WHERE event_id = $1 AND result = 'accepted' AND method = 'qr')     AS qr,
+           (SELECT count(*)::int FROM scans WHERE event_id = $1 AND result = 'accepted' AND method = 'nfc')    AS nfc,
            (SELECT count(*)::int FROM scans WHERE event_id = $1 AND result = 'accepted' AND method = 'geofence') AS geofence
          FROM tickets t WHERE t.event_id = $1`,
         [event.id],
@@ -248,7 +249,7 @@ export async function eventRoutes(app: FastifyInstance, { db, keyEncryptionKey }
       revoked: s.revoked,
       checkedIn: s.checked_in,
       rejectedScans: s.rejected,
-      byMethod: { qr: s.qr, geofence: s.geofence },
+      byMethod: { qr: s.qr, nfc: s.nfc, geofence: s.geofence },
       timeline: timeline.rows.map((r) => ({ at: r.at.toISOString(), checkIns: r.check_ins })),
       gates: devices.rows.map((r) => ({
         deviceId: r.method === 'geofence' ? 'Self check-in' : r.device_id,
