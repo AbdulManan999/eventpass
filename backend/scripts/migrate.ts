@@ -4,7 +4,8 @@ import path from 'node:path';
 import 'dotenv/config';
 import pg from 'pg';
 
-const migrationsDir = fileURLToPath(new URL('../migrations', import.meta.url));
+// backend/migrations, whether this runs from scripts/ (tsx) or dist/scripts/ (compiled, in production).
+const migrationsDir = fileURLToPath(new URL(import.meta.url.includes('/dist/') ? '../../migrations' : '../migrations', import.meta.url));
 
 /** Applies every migrations/*.sql file not yet recorded in schema_migrations, in name order. */
 export async function migrate(connectionString: string, log: (msg: string) => void = console.log): Promise<void> {
@@ -44,7 +45,9 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.a
   migrate(url).then(
     () => console.log('migrations up to date'),
     (err) => {
-      console.error(err.message);
+      // A refused connection is an AggregateError with an empty message; show its code and causes.
+      const causes = err instanceof AggregateError ? err.errors.map((e: Error) => e.message) : [];
+      console.error('Migration failed:', err.message || err.code || String(err), ...causes);
       process.exit(1);
     },
   );

@@ -1,0 +1,34 @@
+# Render Blueprint for the EventPass API. In the Render dashboard:
+# New > Blueprint > pick this repo. See docs/DEPLOY.md.
+services:
+  - type: web
+    name: eventpass-api
+    runtime: node
+    plan: free
+    region: singapore
+    rootDir: backend
+    # Redeploy only when the backend changes, not on app or dashboard commits.
+    buildFilter:
+      paths: ['backend/**']
+    buildCommand: npm ci && npm run build
+    # Free instances have no pre-deploy step, so migrations run on start.
+    # They're recorded in schema_migrations, so a restart applies nothing twice.
+    startCommand: npm run start:prod
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: '24'
+      # Neon connection string (Dashboard > Connect), ending in ?sslmode=require
+      - key: DATABASE_URL
+        sync: false
+      # Signs login tokens. Render generates a random value.
+      - key: JWT_SECRET
+        generateValue: true
+      # Encrypts each event's private signing key. Must equal the DEMO_KEY_ENCRYPTION_KEY
+      # GitHub secret, because the demo reseed workflow creates events with it.
+      - key: KEY_ENCRYPTION_KEY
+        sync: false
+      # Comma-separated origins allowed to call the API from a browser (the admin dashboard).
+      # Mobile apps don't use CORS. Set to the dashboard URL once it's deployed.
+      - key: CORS_ORIGIN
+        value: '*'

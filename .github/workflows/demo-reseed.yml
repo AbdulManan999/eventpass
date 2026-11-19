@@ -1,0 +1,47 @@
+name: demo-reseed
+
+# Re-creates the demo events in the deployed database, so the "live now"
+# conference is always happening when someone opens the demo.
+# The seed's live event runs from 1.5 h ago to 8 h from now; reseeding every
+# 6 hours keeps it live around the clock. Only the demo organizer's events are
+# replaced; other accounts and their events are left alone.
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+concurrency: demo-reseed
+
+jobs:
+  reseed:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DATABASE_URL: ${{ secrets.DEMO_DATABASE_URL }}
+      KEY_ENCRYPTION_KEY: ${{ secrets.DEMO_KEY_ENCRYPTION_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check secrets
+        id: check
+        run: |
+          if [ -z "$DATABASE_URL" ] || [ -z "$KEY_ENCRYPTION_KEY" ]; then
+            echo "DEMO_DATABASE_URL / DEMO_KEY_ENCRYPTION_KEY not set; nothing to reseed (see docs/DEPLOY.md)."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.check.outputs.skip != 'true'
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - if: steps.check.outputs.skip != 'true'
+        run: npm ci
+      - if: steps.check.outputs.skip != 'true'
+        run: npm run migrate
+      - if: steps.check.outputs.skip != 'true'
+        name: Reseed
+        # The seed calls the API routes in-process; this JWT secret only signs
+        # tokens inside this run, so a throwaway value is fine.
+        run: JWT_SECRET="$(openssl rand -base64 48)" npm run seed -- --reset

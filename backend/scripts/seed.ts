@@ -45,7 +45,7 @@ const events = [
     ...ARFA,
     geofenceRadiusM: 250,
     startsAt: hoursFromNow(-1.5),
-    endsAt: hoursFromNow(6),
+    endsAt: hoursFromNow(8), // the demo reseeds every 6 h; 2 h of slack for late scheduled runs
     capacity: 300,
     demoAttendees: 42,
   },
